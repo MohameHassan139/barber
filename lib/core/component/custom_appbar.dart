@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/app_colors.dart';
 
+// ignore: must_be_immutable
 class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final title;
   List<Widget>? actions;
