@@ -41,9 +41,7 @@ class _CalendarPageState extends State<CalendarPage> {
             firstDay: DateTime.utc(2020, 1, 1),
             lastDay: DateTime.utc(2030, 12, 31),
             focusedDay: _focusedDay,
-            selectedDayPredicate: (day) {
-              return isSameDay(_selectedDate, day);
-            },
+            selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
             onDaySelected: (selectedDay, focusedDay) {
               setState(() {
                 _selectedDate = selectedDay;
@@ -51,9 +49,7 @@ class _CalendarPageState extends State<CalendarPage> {
               });
             },
             calendarFormat: CalendarFormat.month,
-            headerStyle: const HeaderStyle(
-              formatButtonVisible: false,
-            ),
+            headerStyle: const HeaderStyle(formatButtonVisible: false),
             calendarStyle: const CalendarStyle(
               selectedDecoration: BoxDecoration(
                 color: Colors.blue,

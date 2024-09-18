@@ -1,3 +1,4 @@
+import 'package:barber/features/reservation/Calendar%20Page.dart';
 import 'package:flutter/material.dart';
 
 class AppointmentSummaryPage extends StatelessWidget {
@@ -19,15 +20,34 @@ class AppointmentSummaryPage extends StatelessWidget {
           TimeOfDay time = appointments[index]['time'];
           return ListTile(
             leading: Icon(Icons.calendar_today),
-            title: Text(
-              "Date: ${date.day}/${date.month}/${date.year}",
-            ),
-            subtitle: Text(
-              "Time: ${time.format(context)}",
+            title: Text("Date: ${date.day}/${date.month}/${date.year}"),
+            subtitle: Text("Time: ${time.format(context)}"),
+            trailing: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () => _editAppointment(context, index, date, time),
             ),
           );
         },
       ),
     );
+  }
+
+  void _editAppointment(
+      BuildContext context, int index, DateTime date, TimeOfDay time) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CalendarPage(
+          initialDate: date,
+          initialTime: time,
+          bookedDates: [], // Pass booked dates if necessary
+        ),
+      ),
+    ).then((result) {
+      if (result != null) {
+        appointments[index]['date'] = result['date'];
+        appointments[index]['time'] = result['time'];
+      }
+    });
   }
 }

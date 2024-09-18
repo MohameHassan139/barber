@@ -19,12 +19,12 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pages.addAll([
-      ProfilePage(
-          appointments: _appointments), // Pass appointments to ProfilePage
+      SearchBarberPage(),
       AppointmentPage(
           appointments:
               _appointments), // AppointmentPage will reflect saved appointments
-      SearchBarberPage(),
+      ProfilePage(
+          appointments: _appointments), // Pass appointments to ProfilePage
     ]);
   }
 
@@ -62,10 +62,10 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today), label: 'Appointments'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );
