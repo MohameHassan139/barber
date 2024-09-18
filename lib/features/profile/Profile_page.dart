@@ -11,8 +11,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool _showSubtitle = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,13 +76,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           if (index != -1) {
                             widget.appointments[index] = updatedAppointment;
                           }
-                          _showSubtitle = widget.appointments.isEmpty;
                         });
                       },
                       onRemove: (appointmentToRemove) {
                         setState(() {
                           widget.appointments.remove(appointmentToRemove);
-                          _showSubtitle = widget.appointments.isEmpty;
                         });
                       },
                     ),
