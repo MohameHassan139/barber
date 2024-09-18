@@ -1,0 +1,96 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../models/user_model.dart';
+
+class RegisterState {
+  final bool isPasswordHidden;
+  final bool isLoading;
+  final bool passwordsMatch;
+  final bool isEmailVerified;
+
+  RegisterState({
+    this.isPasswordHidden = true,
+    this.isLoading = false,
+    this.passwordsMatch = true,
+    this.isEmailVerified = false,
+  });
+
+  RegisterState copyWith({
+    bool? isPasswordHidden,
+    bool? isLoading,
+    bool? passwordsMatch,
+    bool? isEmailVerified,
+  }) {
+    return RegisterState(
+      isPasswordHidden: isPasswordHidden ?? this.isPasswordHidden,
+      isLoading: isLoading ?? this.isLoading,
+      passwordsMatch: passwordsMatch ?? this.passwordsMatch,
+      isEmailVerified: isEmailVerified ?? this.isEmailVerified,
+    );
+  }
+}
+
+class RegisterCubit extends Cubit<RegisterState> {
+  RegisterCubit() : super(RegisterState());
+  final TextEditingController nameTextController = TextEditingController();
+  final TextEditingController emailTextController = TextEditingController();
+  final TextEditingController phoneTextController = TextEditingController();
+  final TextEditingController passwordTextController = TextEditingController();
+  final TextEditingController rePasswordTextController =
+      TextEditingController();
+
+  String? userId;
+  late CreateUserModel model;
+  late CollectionReference users;
+
+  void togglePasswordVisibility() {
+    emit(state.copyWith(isPasswordHidden: !state.isPasswordHidden));
+  }
+
+  Future<void> signUp() async {
+    if (passwordTextController.text != rePasswordTextController.text) {
+      emit(state.copyWith(passwordsMatch: false));
+      return;
+    }
+
+    emit(state.copyWith(isLoading: true));
+
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: emailTextController.text,
+              password: passwordTextController.text)
+          .then((value) async {
+        userId = FirebaseAuth.instance.currentUser?.uid;
+        model = CreateUserModel(
+          email: emailTextController.text,
+          name: nameTextController.text,
+          image:
+              'https://th.bing.com/th/id/R.b9941d2d7120044bd1d8e91c5556c131?rik=sDJfLfGGErT9Fg&pid=ImgRaw&r=0',
+        );
+        await _createUser(model);
+        await FirebaseAuth.instance.currentUser?.sendEmailVerification();
+        emit(state.copyWith(isEmailVerified: true, isLoading: false));
+      });
+    } catch (e) {
+      print(e);
+      emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  Future<void> _createUser(CreateUserModel userModel) async {
+    await users.doc(userId).set(userModel.toJson());
+  }
+
+  @override
+  void dispose() {
+    nameTextController.dispose();
+    emailTextController.dispose();
+    passwordTextController.dispose();
+    rePasswordTextController.dispose();
+    phoneTextController.dispose();
+  }
+}

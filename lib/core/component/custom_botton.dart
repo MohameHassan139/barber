@@ -7,16 +7,16 @@ import 'custom_outline.dart';
 class CustomBottom extends StatelessWidget {
   VoidCallback? onTap;
   String text;
-  double screenHight;
+
   bool? isloading = true;
   CustomBottom(
       {this.onTap,
       required this.text,
-      required this.screenHight,
+    
       this.isloading});
   @override
   Widget build(BuildContext context) {
-    
+    var height = MediaQuery.of(context).size.height;
     return Visibility(
       visible: isloading ?? true,
       replacement: const Center(
@@ -55,7 +55,7 @@ class CustomBottom extends StatelessWidget {
                 '$text',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: screenHight <= 660 ? 11 : 15,
+                  fontSize: height <= 660 ? 11 : 15,
                   fontWeight: FontWeight.w700,
                   color: CustomColors.kWhiteColor,
                 ),
