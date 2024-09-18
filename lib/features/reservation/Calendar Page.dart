@@ -6,7 +6,8 @@ class CalendarPage extends StatefulWidget {
   final TimeOfDay? initialTime;
   final List bookedDates;
 
-  CalendarPage({
+  const CalendarPage({
+    super.key,
     this.initialDate,
     this.initialTime,
     required this.bookedDates,

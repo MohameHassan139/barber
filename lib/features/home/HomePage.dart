@@ -5,13 +5,15 @@ import 'package:barber/features/reservation/Search_barber_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  List<Map<String, dynamic>> _appointments = [];
+  final List<Map<String, dynamic>> _appointments = [];
 
   final List<Widget> _pages = [];
 
@@ -39,7 +41,7 @@ class _HomePageState extends State<HomePage> {
         context,
         MaterialPageRoute(
           builder: (context) => CalendarPage(
-            bookedDates: [],
+            bookedDates: const [],
           ), // Removed bookedDates
         ),
       );

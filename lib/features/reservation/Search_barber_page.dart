@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SearchBarberPage extends StatelessWidget {
+  const SearchBarberPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
