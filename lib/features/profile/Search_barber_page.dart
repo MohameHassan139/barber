@@ -1,4 +1,3 @@
-// Search barber page
 import 'package:flutter/material.dart';
 
 class SearchBarberPage extends StatelessWidget {
