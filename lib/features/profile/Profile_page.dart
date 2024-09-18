@@ -60,11 +60,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ListTile(
               leading: const Icon(Icons.calendar_today),
               title: const Text("Your Appointments"),
-              subtitle: _showSubtitle
-                  ? Text(widget.appointments.isNotEmpty
-                      ? "${widget.appointments.length} appointments booked"
-                      : "No appointments yet.")
-                  : null,
               onTap: () {
                 Navigator.push(
                   context,

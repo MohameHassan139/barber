@@ -1,8 +1,9 @@
 import 'package:barber/features/profile/HomePage.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
-  runApp(BarberApp());
+  initializeDateFormatting().then((_) => runApp(BarberApp()));
 }
 
 class BarberApp extends StatelessWidget {
