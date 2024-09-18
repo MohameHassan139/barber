@@ -1,7 +1,7 @@
-import 'package:barber/features/reservation/Appointments_page.dart';
 import 'package:barber/features/profile/Profile_page.dart';
-import 'package:barber/features/reservation/Search_barber_page.dart';
+import 'package:barber/features/reservation/Appointments_page.dart';
 import 'package:barber/features/reservation/Calendar%20Page.dart';
+import 'package:barber/features/reservation/Search_barber_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,21 +19,28 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pages.addAll([
-      SearchBarberPage(), // Search page is now first
+      ProfilePage(
+          appointments: _appointments), // Pass appointments to ProfilePage
       AppointmentPage(
-          appointments: _appointments), // Appointments page is second
-      ProfilePage(appointments: _appointments), // Profile page is now last
+          appointments:
+              _appointments), // AppointmentPage will reflect saved appointments
+      SearchBarberPage(),
     ]);
   }
 
   // Bottom Navigation: handle the item tapped
   void _onItemTapped(int index) async {
-    if (index == 1) {
+    if (index == 0 || index == 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    } else if (index == 1) {
       final result = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              CalendarPage(bookedDates: []), // Updated with bookedDates
+          builder: (context) => CalendarPage(
+            bookedDates: [],
+          ), // Removed bookedDates
         ),
       );
       if (result != null && result is Map<String, dynamic>) {
@@ -41,10 +48,6 @@ class _HomePageState extends State<HomePage> {
           _appointments.add(result); // Add new appointment to the list
         });
       }
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
     }
   }
 
@@ -59,14 +62,10 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.search), label: 'Search'), // Search is now first
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today),
-              label: 'Appointments'), // Appointments is now second
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile'), // Profile is now last
+              icon: Icon(Icons.calendar_today), label: 'Appointments'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
         ],
       ),
     );

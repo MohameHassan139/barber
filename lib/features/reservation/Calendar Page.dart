@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
   final DateTime? initialDate;
   final TimeOfDay? initialTime;
+  final List bookedDates;
 
   CalendarPage({
     this.initialDate,
     this.initialTime,
-    required List bookedDates,
+    required this.bookedDates,
   });
 
   @override
@@ -17,6 +19,7 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
+  DateTime _focusedDay = DateTime.now();
 
   @override
   void initState() {
@@ -34,12 +37,37 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
       body: Column(
         children: [
-          ListTile(
-            leading: const Icon(Icons.calendar_today),
-            title: Text(_selectedDate == null
-                ? "Select Date"
-                : "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}"),
-            onTap: _pickDate,
+          TableCalendar(
+            firstDay: DateTime.utc(2020, 1, 1),
+            lastDay: DateTime.utc(2030, 12, 31),
+            focusedDay: _focusedDay,
+            selectedDayPredicate: (day) {
+              return isSameDay(_selectedDate, day);
+            },
+            onDaySelected: (selectedDay, focusedDay) {
+              setState(() {
+                _selectedDate = selectedDay;
+                _focusedDay = focusedDay;
+              });
+            },
+            calendarFormat: CalendarFormat.month,
+            headerStyle: const HeaderStyle(
+              formatButtonVisible: false,
+            ),
+            calendarStyle: const CalendarStyle(
+              selectedDecoration: BoxDecoration(
+                color: Colors.blue,
+                shape: BoxShape.circle,
+              ),
+              todayDecoration: BoxDecoration(
+                color: Colors.orange,
+                shape: BoxShape.circle,
+              ),
+              markerDecoration: BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+            ),
           ),
           ListTile(
             leading: const Icon(Icons.access_time),
@@ -62,20 +90,6 @@ class _CalendarPageState extends State<CalendarPage> {
         ],
       ),
     );
-  }
-
-  Future<void> _pickDate() async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate!,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        _selectedDate = pickedDate;
-      });
-    }
   }
 
   Future<void> _pickTime() async {

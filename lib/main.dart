@@ -1,8 +1,8 @@
-import 'package:barber/features/profile/HomePage.dart';
+import 'package:barber/features/reservation/HomePage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp((BarberApp()));
+  runApp(BarberApp());
 }
 
 class BarberApp extends StatelessWidget {

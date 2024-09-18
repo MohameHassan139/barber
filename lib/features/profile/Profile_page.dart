@@ -1,16 +1,11 @@
-import 'package:barber/features/profile/Appointment_summery_page.dart';
+import 'package:barber/features/reservation/Appointment_summery_page.dart';
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
   final List<Map<String, dynamic>> appointments;
 
   ProfilePage({required this.appointments});
 
-  @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,33 +54,15 @@ class _ProfilePageState extends State<ProfilePage> {
               leading: const Icon(Icons.calendar_today),
               title: const Text("Your Appointments"),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AppointmentSummaryPage(
-                      appointments: widget.appointments,
-                      onUpdate: (updatedAppointment) {
-                        setState(() {
-                          // Update the existing appointment
-                          int index = widget.appointments.indexWhere(
-                              (appointment) =>
-                                  appointment['date'] ==
-                                      updatedAppointment['date'] &&
-                                  appointment['time'] ==
-                                      updatedAppointment['time']);
-                          if (index != -1) {
-                            widget.appointments[index] = updatedAppointment;
-                          }
-                        });
-                      },
-                      onRemove: (appointmentToRemove) {
-                        setState(() {
-                          widget.appointments.remove(appointmentToRemove);
-                        });
-                      },
-                    ),
-                  ),
-                );
+                // Show the list of appointments in a new page or update the current page
+                if (appointments.isNotEmpty) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            AppointmentSummaryPage(appointments: appointments)),
+                  );
+                }
               },
             ),
             ListTile(
