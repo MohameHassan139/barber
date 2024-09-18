@@ -1,6 +1,6 @@
-import 'package:barber/features/profile/Appointments_page.dart';
+import 'package:barber/features/reservation/Appointments_page.dart';
 import 'package:barber/features/profile/Profile_page.dart';
-import 'package:barber/features/profile/Search_barber_page.dart';
+import 'package:barber/features/reservation/Search_barber_page.dart';
 import 'package:barber/features/reservation/Calendar%20Page.dart';
 import 'package:flutter/material.dart';
 
