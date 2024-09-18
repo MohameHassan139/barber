@@ -1,4 +1,6 @@
-import 'package:barber/features/auth/view/register_screen.dart';
+import 'dart:math';
+
+import 'package:barber/features/auth/view/register_uesr_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,16 +20,20 @@ class LoginScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => LoginCubit(),
       child: Scaffold(
-        // backgroundColor: CustomColors.kWhiteColor,
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(10, 263, 10, 269),
-            width: double.infinity,
-            child: Form(
-              key: formKey,
+       
+        body: Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 263, 10, 263),
+
+              
               child: Column(
+                
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                
                 children: [
                   Container(
                     margin: const EdgeInsets.fromLTRB(0, 0, 1, 41),
@@ -69,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                                   value!, 5, 100, 'password');
                             },
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 20),
                           state is LoginLoading
                               ? const CircularProgressIndicator()
                               : CustomBottom(
@@ -108,12 +114,13 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
+                         
                           if (state is LoginError)
                             Text(
                               (state as LoginError).error,
                               style: const TextStyle(color: Colors.red),
                             ),
-                          const SizedBox(height: 150),
+                          const SizedBox(height: 100),
                           Row(
                             children: [
                               const Text(

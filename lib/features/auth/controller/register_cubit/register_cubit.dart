@@ -44,8 +44,8 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   String? userId;
   late CreateUserModel model;
-  late CollectionReference users;
-
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  FirebaseAuth auth = FirebaseAuth.instance;
   void togglePasswordVisibility() {
     emit(state.copyWith(isPasswordHidden: !state.isPasswordHidden));
   }
@@ -59,11 +59,13 @@ class RegisterCubit extends Cubit<RegisterState> {
     emit(state.copyWith(isLoading: true));
 
     try {
-      await FirebaseAuth.instance
+      await auth
           .createUserWithEmailAndPassword(
               email: emailTextController.text,
               password: passwordTextController.text)
           .then((value) async {
+        value.user?.sendEmailVerification();
+
         userId = FirebaseAuth.instance.currentUser?.uid;
         model = CreateUserModel(
           email: emailTextController.text,
@@ -72,7 +74,7 @@ class RegisterCubit extends Cubit<RegisterState> {
               'https://th.bing.com/th/id/R.b9941d2d7120044bd1d8e91c5556c131?rik=sDJfLfGGErT9Fg&pid=ImgRaw&r=0',
         );
         await _createUser(model);
-        await FirebaseAuth.instance.currentUser?.sendEmailVerification();
+
         emit(state.copyWith(isEmailVerified: true, isLoading: false));
       });
     } catch (e) {
@@ -82,7 +84,9 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   Future<void> _createUser(CreateUserModel userModel) async {
-    await users.doc(userId).set(userModel.toJson());
+    if (userModel.email!.isNotEmpty) {
+      await users.doc(userId).set(userModel.toJson());
+    }
   }
 
   @override

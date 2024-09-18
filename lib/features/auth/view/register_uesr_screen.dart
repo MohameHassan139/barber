@@ -1,3 +1,4 @@
+import 'package:barber/features/auth/view/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/component/custom_botton.dart';
@@ -6,7 +7,7 @@ import 'package:form_validator/form_validator.dart';
 import '../controller/register_cubit/register_cubit.dart';
 
 class RegisterScreen extends StatelessWidget {
-  RegisterScreen({Key? key}) : super(key: key);
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +31,13 @@ class RegisterScreen extends StatelessWidget {
                       const Text(
                         'Register',
                         style: TextStyle(
-                          fontWeight: FontWeight.w100,
+                          fontWeight: FontWeight.w400,
                           fontSize: 30,
                         ),
+                      ),
+                     
+                      const SizedBox(
+                        height: 20,
                       ),
                       CustomTextFormField(
                         labelText: 'Name',
@@ -78,7 +83,7 @@ class RegisterScreen extends StatelessWidget {
                                 },
                               ),
                               validator: ValidationBuilder()
-                                  .minLength(8)
+                                  .minLength(3)
                                   .maxLength(50)
                                   .build(),
                               hintText: 'password',
@@ -91,7 +96,7 @@ class RegisterScreen extends StatelessWidget {
                               ispassword: state.isPasswordHidden,
                               textController: cubit.rePasswordTextController,
                               validator: ValidationBuilder()
-                                  .maxLength(8)
+                                  .maxLength(3)
                                   .maxLength(50)
                                   .build(),
                               hintText: 'Confirm Password',
@@ -115,14 +120,17 @@ class RegisterScreen extends StatelessWidget {
                               },
                             ),
                       const SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text('Already have an account? '),
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context)
-                                  .pushReplacementNamed('/login');
+                              Navigator.pushReplacement(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return LoginScreen();
+                              }));
                             },
                             child: const Text('Log in'),
                           ),
