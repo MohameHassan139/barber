@@ -35,56 +35,119 @@ class _CalendarPageState extends State<CalendarPage> {
       appBar: AppBar(
         title: const Text("Choose Appointment"),
         backgroundColor: Colors.blueGrey[900],
+        elevation: 10,
       ),
-      body: Column(
-        children: [
-          TableCalendar(
-            firstDay: DateTime.utc(2020, 1, 1),
-            lastDay: DateTime.utc(2030, 12, 31),
-            focusedDay: _focusedDay,
-            selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _selectedDate = selectedDay;
-                _focusedDay = focusedDay;
-              });
-            },
-            calendarFormat: CalendarFormat.month,
-            headerStyle: const HeaderStyle(formatButtonVisible: false),
-            calendarStyle: const CalendarStyle(
-              selectedDecoration: BoxDecoration(
-                color: Colors.blue,
-                shape: BoxShape.circle,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.blueGrey[50],
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    offset: Offset(0, 4),
+                    blurRadius: 8,
+                  ),
+                ],
               ),
-              todayDecoration: BoxDecoration(
-                color: Colors.orange,
-                shape: BoxShape.circle,
-              ),
-              markerDecoration: BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.all(8.0),
+              child: TableCalendar(
+                firstDay: DateTime.utc(2020, 1, 1),
+                lastDay: DateTime.utc(2030, 12, 31),
+                focusedDay: _focusedDay,
+                selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _selectedDate = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
+                },
+                calendarFormat: CalendarFormat.month,
+                headerStyle: const HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                ),
+                calendarStyle: const CalendarStyle(
+                  selectedDecoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    shape: BoxShape.circle,
+                  ),
+                  todayDecoration: BoxDecoration(
+                    color: Colors.orangeAccent,
+                    shape: BoxShape.circle,
+                  ),
+                  markerDecoration: BoxDecoration(
+                    color: Colors.redAccent,
+                    shape: BoxShape.circle,
+                  ),
+                  outsideDaysVisible: false,
+                ),
               ),
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.access_time),
-            title: Text(_selectedTime == null
-                ? "Select Time"
-                : _selectedTime!.format(context)),
-            onTap: _pickTime,
-          ),
-          ElevatedButton(
-            onPressed: _selectedDate != null && _selectedTime != null
-                ? () {
-                    Navigator.pop(context, {
-                      "date": _selectedDate!,
-                      "time": _selectedTime!,
-                    });
-                  }
-                : null,
-            child: const Text("Save Appointment"),
-          ),
-        ],
+            const SizedBox(height: 10),
+            ListTile(
+              leading: const Icon(Icons.access_time, color: Colors.blueGrey),
+              title: Text(
+                _selectedTime == null
+                    ? "Select Time"
+                    : _selectedTime!.format(context),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+              onTap: _pickTime,
+              tileColor: Colors.blueGrey[50],
+              contentPadding: const EdgeInsets.all(16.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              trailing:
+                  Icon(Icons.arrow_forward_ios, color: Colors.blueGrey[600]),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 2.0),
+              child: ElevatedButton(
+                onPressed: _selectedDate != null && _selectedTime != null
+                    ? () {
+                        Navigator.pop(context, {
+                          "date": _selectedDate!,
+                          "time": _selectedTime!,
+                        });
+                      }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.teal, // Text color
+                  elevation: 5, // Shadow
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30), // Rounded shape
+                  ),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.check_circle, size: 24, color: Colors.white),
+                    SizedBox(width: 8),
+                    Text(
+                      "Save Appointment",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

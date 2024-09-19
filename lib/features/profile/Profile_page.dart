@@ -1,3 +1,4 @@
+import 'package:barber/features/data_performance/data_performance_page.dart';
 import 'package:barber/features/favourite/favorites_page.dart';
 import 'package:barber/features/profile/user_details_page.dart';
 import 'package:barber/features/reservation/Appointment_summery_page.dart';
@@ -215,7 +216,12 @@ class ProfilePage extends StatelessWidget {
   }
 
   void _navigateToSettings(BuildContext context) {
-    // Implement navigation to settings
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const DataPreferencesPage(),
+      ),
+    );
   }
 
   void _handleLogout(BuildContext context) {
