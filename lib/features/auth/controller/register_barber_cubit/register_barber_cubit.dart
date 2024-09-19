@@ -186,6 +186,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   }) async {
     emit(RegistrationLoading());
     try {
+
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
         email: email,
@@ -270,17 +271,16 @@ class RegistrationCubit extends Cubit<RegistrationState> {
       }
       await registerBarber(email: email, password: password).then((_) async {
         await users.doc(email).set({
-        'name': name,
-        'email': email,
-        'password': password,
-        'bio': bio,
-        'phone': phone,
-        'profileImage': profileUrl,
-        'coverImage': coverUrl,
+          'name': name,
+          'email': email,
+          'password': password,
+          'bio': bio,
+          'phone': phone,
+          'profileImage': profileUrl,
+          'coverImage': coverUrl,
+        });
       });
-   
-      });
-       
+
       emit(RegistrationSuccess());
     } catch (e) {
       emit(RegistrationError(e.toString()));
