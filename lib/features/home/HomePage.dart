@@ -1,4 +1,4 @@
-import 'package:barber/features/Search_barber_page/Search_barber_page.dart';
+import 'package:barber/features/Search_barber_page/search_barber_page.dart';
 import 'package:barber/features/reservation/Calendar%20Page.dart';
 import 'package:flutter/material.dart';
 import 'package:barber/features/profile/profile_page.dart';

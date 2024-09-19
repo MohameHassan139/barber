@@ -199,7 +199,10 @@ class ProfilePage extends StatelessWidget {
   void _navigateToFavorites(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const FavoritesPage()),
+      MaterialPageRoute(
+          builder: (context) => const FavoritesPage(
+                favoriteShops: [],
+              )),
     );
   }
 

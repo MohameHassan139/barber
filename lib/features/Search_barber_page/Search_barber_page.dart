@@ -1,5 +1,7 @@
+import 'package:barber/features/Search_barber_page/salon_detail_page.dart';
+import 'package:barber/features/home/HomePage.dart';
 import 'package:flutter/material.dart';
-import 'package:barber/features/Search_barber_page/Shop_Info_Page.dart'; // Ensure this path is correct
+// Ensure this path is correct
 
 class SearchBarberPage extends StatefulWidget {
   const SearchBarberPage({super.key});
@@ -122,7 +124,7 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ShopInfoPage(
+            builder: (context) => SalonDetailPage(
               title: shop["title"]!,
               subtitle: shop["subtitle"]!,
             ),
