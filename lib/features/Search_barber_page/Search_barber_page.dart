@@ -1,7 +1,5 @@
 import 'package:barber/features/Search_barber_page/salon_detail_page.dart';
-import 'package:barber/features/home/HomePage.dart';
 import 'package:flutter/material.dart';
-// Ensure this path is correct
 
 class SearchBarberPage extends StatefulWidget {
   const SearchBarberPage({super.key});

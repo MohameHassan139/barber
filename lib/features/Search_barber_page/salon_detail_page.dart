@@ -1,34 +1,45 @@
-import 'package:barber/features/Search_barber_page/Search_barber_page.dart';
 import 'package:barber/features/favourite/favorites_page.dart';
-import 'package:barber/features/home/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class SalonDetailPage extends StatefulWidget {
-  const SalonDetailPage(
-      {super.key, required this.title, required this.subtitle});
-
   final String title;
   final String subtitle;
+
+  const SalonDetailPage({Key? key, required this.title, required this.subtitle})
+      : super(key: key);
 
   @override
   _SalonDetailPageState createState() => _SalonDetailPageState();
 }
 
 class _SalonDetailPageState extends State<SalonDetailPage> {
-  // List to hold favorite barber shops
-  List<Map<String, String>> favoriteShops = [];
+  bool isFavorite = false;
+  final List<Map<String, String>> favoriteShops = [];
 
-  // Flag to track if this barber shop is favorited
-  bool isFavorited = false;
+  void _toggleFavorite() {
+    setState(() {
+      isFavorite = !isFavorite;
+      if (isFavorite) {
+        favoriteShops.add({
+          'title': widget.title,
+          'subtitle': widget.subtitle,
+        });
+      } else {
+        favoriteShops.removeWhere((shop) =>
+            shop['title'] == widget.title &&
+            shop['subtitle'] == widget.subtitle);
+      }
+    });
+  }
 
-  // Snackbar for feedback when adding/removing from favorites
-  void _showSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.blueGrey[900],
-        duration: const Duration(seconds: 2),
+  void _viewFavorites() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FavoritesPage(
+          favoriteShops: favoriteShops,
+        ),
       ),
     );
   }
@@ -36,42 +47,26 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: Text(
-          widget.title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+        backgroundColor: Colors.pinkAccent,
+        elevation: 0,
+        title: const Text(
+          'Kadanama Salon',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.blueGrey[900],
-        elevation: 5,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HomePage(),
-              ),
-            );
+            Navigator.of(context).pop();
           },
         ),
         actions: [
-          // Button to navigate to FavoritesPage
           IconButton(
-            icon: const Icon(Icons.favorite),
-            color: Colors.white,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      FavoritesPage(favoriteShops: favoriteShops),
-                ),
-              );
-            },
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: Colors.pinkAccent,
+            ),
+            onPressed: _toggleFavorite,
           ),
         ],
       ),
@@ -81,191 +76,251 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Salon Image with stylish shadow and rounded corners
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.asset(
-                    'assets/images/salon1.jpeg',
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+              // Hero Image
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
+                child: Image.asset(
+                  'assets/images/salon1.jpeg',
+                  height: 200,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Salon title and dynamic favorite icon
+              // Title and Favorite Icon
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Text(
-                      widget.title,
-                      style: TextStyle(
+                  Text(
+                    widget.title,
+                    style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blueGrey[900],
-                      ),
-                    ),
+                        color: Colors.black87),
                   ),
                   IconButton(
                     icon: Icon(
-                      isFavorited ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorited ? Colors.redAccent : Colors.grey,
-                      size: 30,
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: Colors.pinkAccent,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        isFavorited = !isFavorited;
-
-                        if (isFavorited) {
-                          // Add to favorites
-                          favoriteShops.add({
-                            'title': widget.title,
-                            'subtitle': widget.subtitle,
-                          });
-                          _showSnackbar('Added to favorites!');
-                        } else {
-                          // Remove from favorites
-                          favoriteShops.removeWhere(
-                              (shop) => shop['title'] == widget.title);
-                          _showSnackbar('Removed from favorites!');
-                        }
-                      });
-                    },
+                    onPressed: _toggleFavorite,
                   ),
                 ],
               ),
-
               const SizedBox(height: 8),
-
-              // Location
               Text(
-                '1 Maja 323',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.blueGrey[700],
-                ),
+                widget.subtitle,
+                style: const TextStyle(fontSize: 16, color: Colors.black54),
               ),
-              const SizedBox(height: 16),
-
-              // Rating bar with gradient background
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.blueGrey[50]!, Colors.white],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
+              const SizedBox(height: 8),
+              // Rating Bar
+              RatingBar.builder(
+                initialRating: 4.5,
+                minRating: 1,
+                direction: Axis.horizontal,
+                itemCount: 5,
+                itemSize: 24,
+                unratedColor: Colors.grey[300],
+                itemBuilder: (context, _) => const Icon(
+                  Icons.star,
+                  color: Colors.amber,
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Center(
-                  child: RatingBar.builder(
-                    initialRating: 4,
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: 24,
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                    ),
-                    onRatingUpdate: (rating) {
-                      // Handle rating update
-                    },
-                  ),
-                ),
+                onRatingUpdate: (rating) {
+                  // Handle rating update
+                },
               ),
-              const SizedBox(height: 16),
-
-              // Open hours with stylish row
-              Row(
+              const SizedBox(height: 8),
+              // Opening Hours
+              const Row(
                 children: [
-                  Icon(Icons.access_time, color: Colors.blueGrey[700]),
-                  const SizedBox(width: 4),
+                  Icon(Icons.access_time, color: Colors.green),
+                  SizedBox(width: 4),
                   Text(
                     'Open Now',
-                    style: TextStyle(
-                      color: Colors.green[700],
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.green),
                   ),
-                  const SizedBox(width: 8),
-                  Text(
-                    '9:00 AM - 7:00 PM',
-                    style: TextStyle(color: Colors.blueGrey[600]),
-                  ),
+                  SizedBox(width: 8),
+                  Text('9:00 AM - 7:00 PM',
+                      style: TextStyle(fontSize: 16, color: Colors.black54)),
                 ],
               ),
               const SizedBox(height: 16),
-
-              // Buttons for Services, Reviews, About with improved style
+              // Section Buttons
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildElevatedButton(
-                    context,
-                    text: 'Services',
-                    icon: Icons.design_services,
-                    onPressed: () {
-                      // Handle "Services" button
-                    },
-                  ),
-                  _buildElevatedButton(
-                    context,
-                    text: 'Reviews',
-                    icon: Icons.comment,
-                    onPressed: () {
-                      // Handle "Reviews" button
-                    },
-                  ),
-                  _buildElevatedButton(
-                    context,
-                    text: 'About',
-                    icon: Icons.info_outline,
-                    onPressed: () {
-                      // Handle "About" button
-                    },
-                  ),
+                  _sectionButton(context, 'Services'),
+                  _sectionButton(context, 'Reviews'),
+                  _sectionButton(context, 'About'),
                 ],
               ),
+              const SizedBox(height: 24),
+              // Services Section
+              _sectionHeader('Popular Services'),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 2,
+                itemBuilder: (context, index) {
+                  return const ListTile(
+                    leading: Icon(Icons.check_circle_outline,
+                        color: Colors.pinkAccent),
+                    title: Text('Pełen zestaw'),
+                    subtitle: Text('60 min | Manicure tytanowy'),
+                    trailing: Text('100,00 zł',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              // Reviews Section
+              _sectionHeader('Reviews'),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 3, // Replace with actual number of reviews
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: const CircleAvatar(
+                      radius: 30,
+                      backgroundImage: AssetImage('assets/images/avatar.jpg'),
+                    ),
+                    title: const Text('Mohamed Hassan'),
+                    subtitle: const Text('Great experience!'),
+                    trailing: RatingBar.builder(
+                      initialRating: 4,
+                      minRating: 1,
+                      direction: Axis.horizontal,
+                      itemCount: 5,
+                      itemSize: 16,
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (rating) {
+                        // Handle rating update
+                      },
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              // About Section
+              _sectionHeader('About'),
+              _buildAboutSection(),
             ],
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _viewFavorites,
+        child: const Icon(Icons.favorite),
+        backgroundColor: Colors.pinkAccent,
+      ),
+    );
+  }
+
+  Widget _sectionButton(BuildContext context, String label) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.pinkAccent,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      onPressed: () {
+        // Scroll to corresponding section (implement as needed)
+      },
+      child: Text(
+        label,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _sectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
         ),
       ),
     );
   }
 
-  // Helper method to build stylish elevated buttons
-  Widget _buildElevatedButton(BuildContext context,
-      {required String text,
-      required IconData icon,
-      required VoidCallback onPressed}) {
-    return ElevatedButton.icon(
-      icon: Icon(icon, size: 20),
-      label: Text(text),
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blueGrey[900],
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+  Widget _buildAboutSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 8),
+        _buildOpeningHours(),
+        const SizedBox(height: 16),
+        const Text(
+          'Information',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        elevation: 5,
+        const SizedBox(height: 8),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12.0),
+          child: Image.asset(
+            'assets/images/map1.jpg',
+            width: double.infinity,
+            height: 200,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildOpeningHours() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Opening Hours',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        _buildDayRow('Monday', 'Closed', Colors.grey),
+        _buildDayRow('Tuesday', '9:00 AM - 7:00 PM', Colors.green),
+        _buildDayRow('Wednesday', '9:00 AM - 7:00 PM', Colors.green),
+        _buildDayRow('Thursday', '9:00 AM - 7:00 PM', Colors.green),
+        _buildDayRow('Friday', '9:00 AM - 7:00 PM', Colors.green),
+        _buildDayRow('Saturday', '9:00 AM - 7:00 PM', Colors.green),
+        _buildDayRow('Sunday', '9:00 AM - 7:00 PM', Colors.green),
+        // Repeat for other days of the week
+      ],
+    );
+  }
+
+  Widget _buildDayRow(String day, String hours, Color dotColor) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: dotColor,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            day,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            hours,
+            style: const TextStyle(fontSize: 16, color: Colors.black54),
+          ),
+        ],
       ),
     );
   }
