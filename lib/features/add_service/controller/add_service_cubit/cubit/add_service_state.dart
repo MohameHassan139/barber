@@ -20,3 +20,13 @@ class UploadImageError extends AddServiceState {
   final String error;
   UploadImageError(this.error);
 }
+
+
+class AddServiceLoading extends AddServiceState {}
+
+class AddServiceSuccess extends AddServiceState {}
+
+class AddServiceError extends AddServiceState {
+  final String error;
+  AddServiceError(this.error);
+}

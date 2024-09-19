@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 
@@ -24,8 +25,12 @@ class AddServiceCubit extends Cubit<AddServiceState> {
   File? serviceImage;
   String? imageUrl;
   int rand = Random().nextInt(9999999);
+  TextEditingController nameController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
 
-  Future<void> pickProfileImage() async {
+  Future<void> pickServiceImage() async {
     final pickerFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickerFile != null) {
       serviceImage = File(pickerFile.path);
@@ -53,19 +58,30 @@ class AddServiceCubit extends Cubit<AddServiceState> {
     }
   }
 
-  Future<void> addService({
-    required String name,
-    required int time,
-    required int cost,
+  Future<void> uploadServiceData({
     String? imageUrl,
-    String? description,
   }) async {
     await barberService.add({
       'image': imageUrl,
-      'cost': cost,
-      'name': name,
-      'time': time,
-      "description": description,
+      'cost': int.parse(priceController.text),
+      'name': nameController.text,
+      'time': int.parse(timeController.text),
+      "description": descriptionController.text,
     });
+  }
+
+  bool isloading = false;
+  Future<void> addService() async {
+    emit(AddServiceLoading());
+    isloading = true;
+    try {
+      String? imageUrl = await uploadProfileImage();
+      await uploadServiceData(imageUrl: imageUrl);
+      isloading = false;
+      emit(AddServiceSuccess());
+    } catch (e) {
+      isloading = false;
+      emit(AddServiceError(e.toString()));
+    }
   }
 }

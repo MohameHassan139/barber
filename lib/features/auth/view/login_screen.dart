@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:barber/features/auth/view/register_uesr_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:form_validator/form_validator.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../core/component/custom_botton.dart';
@@ -55,9 +56,10 @@ class LoginScreen extends StatelessWidget {
                             labelText: 'E-mail',
                             hintText: 'E-mail',
                             textController: cubit.emailController,
-                            validator: (value) {
-                              return cubit.validInput(value!, 5, 100, 'email');
-                            },
+                            validator: ValidationBuilder()
+                                .email()
+                                .maxLength(50)
+                                .build(),
                           ),
                           const SizedBox(height: 10),
                           CustomTextFormField(
@@ -70,10 +72,10 @@ class LoginScreen extends StatelessWidget {
                               icon: Icon(cubit.passwordIcon),
                             ),
                             textController: cubit.passwordController,
-                            validator: (value) {
-                              return cubit.validInput(
-                                  value!, 5, 100, 'password');
-                            },
+                            validator: ValidationBuilder()
+                                .minLength(6)
+                                .maxLength(50)
+                                .build(),
                           ),
                           const SizedBox(height: 20),
                           state is LoginLoading
