@@ -1,30 +1,33 @@
 import 'package:barber/constants/app_colors.dart';
 import 'package:barber/core/component/custom_botton.dart';
+import 'package:barber/features/add_service/firebase_sevice_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_validator/form_validator.dart';
 
 import '../../../core/component/custom_textformfield.dart';
-import '../controller/add_service_cubit/cubit/add_service_cubit.dart';
+import '../controller/add_service_cubit/add_service_cubit.dart';
 
 class AddServiceScreen extends StatelessWidget {
   AddServiceScreen({super.key});
   var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AddServiceCubit>(
-      create: (context) => AddServiceCubit(),
-      child: Scaffold(
-        appBar: AppBar(),
-        body: Center(
-          child: BlocBuilder<AddServiceCubit, AddServiceState>(
-            builder: (context, state) {
-              var cubit = context.read<AddServiceCubit>();
-
-              return Form(
-                key: formKey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add Service'),
+      ),
+      body: Center(
+        child: BlocBuilder<AddServiceCubit, AddServiceState>(
+          builder: (context, state) {
+            var cubit = context.read<AddServiceCubit>();
+    
+            return Form(
+              key: formKey,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Align(
+                  alignment: Alignment.topCenter,
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
@@ -33,7 +36,7 @@ class AddServiceScreen extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   shape: BoxShape.rectangle,
                                   color: CustomColors.kGreyColor),
                               height: 120,
@@ -71,7 +74,7 @@ class AddServiceScreen extends StatelessWidget {
                           hintText: 'Enter Time',
                           labelText: 'Time',
                           textController: cubit.timeController,
-                          fieldType: TextInputType.name,
+                          fieldType: TextInputType.number,
                           validator: ValidationBuilder().required().build(),
                           prefixIcon: const Icon(Icons.timer),
                         ),
@@ -98,9 +101,9 @@ class AddServiceScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );

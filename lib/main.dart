@@ -1,6 +1,11 @@
+import 'package:barber/features/add_service/controller/get_service_cubit/get_service_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'features/add_service/controller/add_service_cubit/add_service_cubit.dart';
+import 'features/add_service/firebase_sevice_helper.dart';
 import 'features/add_service/view/add_service_screen.dart';
+import 'features/add_service/view/view_service_screen.dart';
 import 'features/auth/view/User_type_screen.dart';
 import 'features/auth/view/login_screen.dart';
 import 'firebase_options.dart';
@@ -19,14 +24,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-      
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AddServiceCubit(
+            firebaseSeviceHelper: FirebaseSeviceHelper(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => GetServiceCubit(
+            firebaseSeviceHelper: FirebaseSeviceHelper(),
+          )..getAllData(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: ViewServiceScreen(),
       ),
-      home: AddServiceScreen(),
     );
   }
 }

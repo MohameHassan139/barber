@@ -21,7 +21,6 @@ class UploadImageError extends AddServiceState {
   UploadImageError(this.error);
 }
 
-
 class AddServiceLoading extends AddServiceState {}
 
 class AddServiceSuccess extends AddServiceState {}
