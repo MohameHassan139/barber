@@ -2,7 +2,7 @@ import 'package:barber/features/home/HomePage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(BarberApp());
+  runApp(const BarberApp());
 }
 
 class BarberApp extends StatelessWidget {
@@ -16,7 +16,7 @@ class BarberApp extends StatelessWidget {
         primarySwatch: Colors.blueGrey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(),
+      home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }

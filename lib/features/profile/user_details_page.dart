@@ -210,7 +210,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
-          borderSide: BorderSide(color: Colors.blueAccent, width: 2),
+          borderSide: const BorderSide(color: Colors.blueAccent, width: 2),
         ),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
       ),
