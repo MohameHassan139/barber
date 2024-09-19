@@ -25,3 +25,7 @@ class PasswordMatchState extends RegistrationState {
     this.passwordsMatch = true,
   });
 }
+class PasswordConfirmHiddenState extends RegistrationState {
+  final bool isConfirmPasswordHidden;
+  PasswordConfirmHiddenState({this.isConfirmPasswordHidden = true});
+}

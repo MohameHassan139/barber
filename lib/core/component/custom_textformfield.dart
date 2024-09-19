@@ -14,6 +14,7 @@ class CustomTextFormField extends StatelessWidget {
   bool? ispassword = false;
   void Function()? onTap;
   bool? readOnly = false;
+  int? maxLines;
   CustomTextFormField({
     key,
     required this.hintText,
@@ -27,6 +28,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.labelText,
     this.prefixIcon,
     this.readOnly,
+      this.maxLines
   });
 
   @override
@@ -40,6 +42,7 @@ class CustomTextFormField extends StatelessWidget {
         obscureText: ispassword ?? false,
         controller: textController,
         readOnly: readOnly ?? false,
+        maxLines: maxLines ?? 1,
         decoration: InputDecoration(
           // suffix: suffix,
           suffixIcon: suffix,
