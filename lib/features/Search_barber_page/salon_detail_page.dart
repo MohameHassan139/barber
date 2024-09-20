@@ -279,7 +279,7 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
             ),
           ),
           const Spacer(),
-          Icon(Icons.info_outline, color: Colors.pinkAccent),
+          const Icon(Icons.info_outline, color: Colors.pinkAccent),
         ],
       ),
     );
