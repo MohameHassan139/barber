@@ -6,8 +6,8 @@ class SalonDetailPage extends StatefulWidget {
   final String title;
   final String subtitle;
 
-  const SalonDetailPage({Key? key, required this.title, required this.subtitle})
-      : super(key: key);
+  const SalonDetailPage(
+      {super.key, required this.title, required this.subtitle});
 
   @override
   _SalonDetailPageState createState() => _SalonDetailPageState();
@@ -16,6 +16,12 @@ class SalonDetailPage extends StatefulWidget {
 class _SalonDetailPageState extends State<SalonDetailPage> {
   bool isFavorite = false;
   final List<Map<String, String>> favoriteShops = [];
+  final ScrollController _scrollController = ScrollController();
+
+  // Define GlobalKeys for each section
+  final GlobalKey _servicesKey = GlobalKey();
+  final GlobalKey _reviewsKey = GlobalKey();
+  final GlobalKey _aboutKey = GlobalKey();
 
   void _toggleFavorite() {
     setState(() {
@@ -44,6 +50,14 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
     );
   }
 
+  void _scrollToSection(GlobalKey key) {
+    Scrollable.ensureVisible(
+      key.currentContext!,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +66,7 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
         elevation: 0,
         title: const Text(
           'Kadanama Salon',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -60,17 +74,9 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
             Navigator.of(context).pop();
           },
         ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: Colors.pinkAccent,
-            ),
-            onPressed: _toggleFavorite,
-          ),
-        ],
       ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -94,7 +100,7 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
                   Text(
                     widget.title,
                     style: const TextStyle(
-                        fontSize: 22,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87),
                   ),
@@ -110,9 +116,9 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
               const SizedBox(height: 8),
               Text(
                 widget.subtitle,
-                style: const TextStyle(fontSize: 16, color: Colors.black54),
+                style: const TextStyle(fontSize: 18, color: Colors.black54),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               // Rating Bar
               RatingBar.builder(
                 initialRating: 4.5,
@@ -129,7 +135,7 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
                   // Handle rating update
                 },
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               // Opening Hours
               const Row(
                 children: [
@@ -144,182 +150,193 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
                       style: TextStyle(fontSize: 16, color: Colors.black54)),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               // Section Buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _sectionButton(context, 'Services'),
-                  _sectionButton(context, 'Reviews'),
-                  _sectionButton(context, 'About'),
+                  _sectionButton('Services', _servicesKey),
+                  _sectionButton('Reviews', _reviewsKey),
+                  _sectionButton('About', _aboutKey),
                 ],
               ),
               const SizedBox(height: 24),
               // Services Section
               _sectionHeader('Popular Services'),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return const ListTile(
-                    leading: Icon(Icons.check_circle_outline,
-                        color: Colors.pinkAccent),
-                    title: Text('Pełen zestaw'),
-                    subtitle: Text('60 min | Manicure tytanowy'),
-                    trailing: Text('100,00 zł',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                  );
-                },
+              Container(
+                key: _servicesKey,
+                child: Column(
+                  children: [
+                    _serviceTile(
+                        'Full Set', '60 min | Titanium Manicure', '100,00 zł'),
+                    _serviceTile(
+                        'Hair Cut', '45 min | Stylish Hair Cut', '80,00 zł'),
+                    _serviceTile('Beard Grooming',
+                        '30 min | Beard Trim and Shape', '60,00 zł'),
+                    _serviceTile('Relaxation Massage', '60 min | Full Body',
+                        '120,00 zł'),
+                  ],
+                ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               // Reviews Section
               _sectionHeader('Reviews'),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 3, // Replace with actual number of reviews
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: const CircleAvatar(
-                      radius: 30,
-                      backgroundImage: AssetImage('assets/images/avatar.jpg'),
-                    ),
-                    title: const Text('Mohamed Hassan'),
-                    subtitle: const Text('Great experience!'),
-                    trailing: RatingBar.builder(
-                      initialRating: 4,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      itemCount: 5,
-                      itemSize: 16,
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      onRatingUpdate: (rating) {
-                        // Handle rating update
-                      },
-                    ),
-                  );
-                },
+              Container(
+                key: _reviewsKey,
+                child: Column(
+                  children: [
+                    _reviewTile('Mohamed Hassan',
+                        'Amazing service and friendly staff!', 5),
+                    _reviewTile('Abdallah Abdalmonem',
+                        'Great experience, highly recommended!', 4),
+                    _reviewTile('Momen Raafat',
+                        'Very professional and clean salon.', 5),
+                    _reviewTile('Islam Ragab',
+                        'Amazing service and friendly staff!', 4),
+                  ],
+                ),
               ),
-              const SizedBox(height: 16),
-              // About Section
+              const SizedBox(height: 24),
+              // About Section with updated style
               _sectionHeader('About'),
-              _buildAboutSection(),
+              Container(
+                key: _aboutKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Opening Hours'),
+                    _openingHoursRow('Monday', 'Closed', Colors.grey),
+                    _openingHoursRow(
+                        'Tuesday', '9:00 AM - 7:00 PM', Colors.green),
+                    _openingHoursRow(
+                        'Wednesday', '9:00 AM - 7:00 PM', Colors.green),
+                    _openingHoursRow(
+                        'Thursday', '9:00 AM - 7:00 PM', Colors.green),
+                    _openingHoursRow(
+                        'Friday', '9:00 AM - 7:00 PM', Colors.green),
+                    _openingHoursRow(
+                        'Saturday', '9:00 AM - 7:00 PM', Colors.green),
+                    _openingHoursRow('Sunday', 'Closed', Colors.grey),
+                    const SizedBox(height: 16),
+                    const Text('Information'),
+                    const SizedBox(height: 8),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: Image.asset(
+                        'assets/images/map1.jpg', // Changed to asset image
+                        width: 300,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _viewFavorites,
-        child: const Icon(Icons.favorite),
-        backgroundColor: Colors.pinkAccent,
-      ),
     );
   }
 
-  Widget _sectionButton(BuildContext context, String label) {
+  Widget _sectionButton(String label, GlobalKey key) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.pinkAccent,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
       onPressed: () {
-        // Scroll to corresponding section (implement as needed)
+        _scrollToSection(key);
       },
-      child: Text(
-        label,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      ),
+      child: Text(label),
     );
   }
 
   Widget _sectionHeader(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.black87,
+      child: Row(
+        children: [
+          Container(
+            height: 40,
+            width: 4,
+            decoration: BoxDecoration(
+              color: Colors.pinkAccent,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+              letterSpacing: 1.2,
+              fontFamily: 'Raleway', // Stylish font
+            ),
+          ),
+          const Spacer(),
+          Icon(Icons.info_outline, color: Colors.pinkAccent),
+        ],
+      ),
+    );
+  }
+
+  Widget _serviceTile(String title, String subtitle, String price) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 4,
+      child: ListTile(
+        leading:
+            const Icon(Icons.check_circle_outline, color: Colors.pinkAccent),
+        title: Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(subtitle),
+        trailing: Text(price, style: const TextStyle(color: Colors.pinkAccent)),
+      ),
+    );
+  }
+
+  Widget _reviewTile(String reviewer, String review, double rating) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 4,
+      child: ListTile(
+        leading: const Icon(Icons.person, color: Colors.pinkAccent),
+        title: Text(
+          reviewer,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(review),
+        trailing: RatingBarIndicator(
+          rating: rating,
+          itemBuilder: (context, _) => const Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+          itemCount: 5,
+          itemSize: 20,
+          direction: Axis.horizontal,
         ),
       ),
     );
   }
 
-  Widget _buildAboutSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 8),
-        _buildOpeningHours(),
-        const SizedBox(height: 16),
-        const Text(
-          'Information',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
-          child: Image.asset(
-            'assets/images/map1.jpg',
-            width: double.infinity,
-            height: 200,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildOpeningHours() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Opening Hours',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        _buildDayRow('Monday', 'Closed', Colors.grey),
-        _buildDayRow('Tuesday', '9:00 AM - 7:00 PM', Colors.green),
-        _buildDayRow('Wednesday', '9:00 AM - 7:00 PM', Colors.green),
-        _buildDayRow('Thursday', '9:00 AM - 7:00 PM', Colors.green),
-        _buildDayRow('Friday', '9:00 AM - 7:00 PM', Colors.green),
-        _buildDayRow('Saturday', '9:00 AM - 7:00 PM', Colors.green),
-        _buildDayRow('Sunday', '9:00 AM - 7:00 PM', Colors.green),
-        // Repeat for other days of the week
-      ],
-    );
-  }
-
-  Widget _buildDayRow(String day, String hours, Color dotColor) {
+  Widget _openingHoursRow(String day, String hours, Color textColor) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(
-              color: dotColor,
-              shape: BoxShape.circle,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            day,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            hours,
-            style: const TextStyle(fontSize: 16, color: Colors.black54),
-          ),
+          Text(day, style: const TextStyle(fontSize: 16)),
+          Text(hours, style: TextStyle(fontSize: 16, color: textColor)),
         ],
       ),
     );

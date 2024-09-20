@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 class FavoritesPage extends StatelessWidget {
   final List<Map<String, String>> favoriteShops;
 
-  const FavoritesPage({Key? key, required this.favoriteShops})
-      : super(key: key);
+  const FavoritesPage({super.key, required this.favoriteShops});
 
   @override
   Widget build(BuildContext context) {
