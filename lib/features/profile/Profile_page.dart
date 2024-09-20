@@ -15,11 +15,14 @@ class ProfilePage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          // Gradient Background
+          // Calmer Gradient Background
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blueAccent, Colors.cyanAccent],
+                colors: [
+                  Color(0xFFB2DFDB),
+                  Color(0xFF80CBC4)
+                ], // Softer teal shades
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -36,7 +39,7 @@ class ProfilePage extends StatelessWidget {
                   padding: const EdgeInsets.all(4), // Border size
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Colors.blueAccent, Colors.cyanAccent],
+                      colors: [Color(0xFFB2DFDB), Color(0xFF80CBC4)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
@@ -157,12 +160,12 @@ class ProfilePage extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         elevation: 10,
-        shadowColor: Colors.redAccent.withOpacity(0.5),
+        shadowColor: Colors.blueGrey.withOpacity(0.3),
         child: ListTile(
           leading: Container(
             padding: const EdgeInsets.all(8.0),
-            decoration: const BoxDecoration(
-              color: Colors.redAccent,
+            decoration: BoxDecoration(
+              color: Colors.blueGrey[900],
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: Colors.white, size: 25),
@@ -172,11 +175,10 @@ class ProfilePage extends StatelessWidget {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.redAccent,
+              color: Colors.blueGrey,
             ),
           ),
-          trailing:
-              const Icon(Icons.arrow_forward_ios, color: Colors.redAccent),
+          trailing: const Icon(Icons.arrow_forward_ios, color: Colors.blueGrey),
           tileColor: Colors.white,
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),

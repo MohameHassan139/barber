@@ -32,7 +32,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Colors.white70, // Light gray text color for contrast
           ),
         ),
         centerTitle: true,
@@ -40,7 +40,10 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blueAccent, Colors.cyanAccent],
+            colors: [
+              Colors.teal,
+              Colors.lightBlueAccent
+            ], // Gradient background
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -152,13 +155,14 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                           elevation: 8.0,
-                          backgroundColor: Colors.blueAccent,
-                          shadowColor: Colors.cyanAccent,
+                          backgroundColor:
+                              Colors.teal[700], // Darker teal button
+                          shadowColor: Colors.tealAccent[100],
                         ),
                         child: Ink(
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
-                              colors: [Colors.blueAccent, Colors.cyanAccent],
+                              colors: [Colors.teal, Colors.tealAccent],
                             ),
                             borderRadius: BorderRadius.circular(30.0),
                           ),
@@ -171,7 +175,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: Colors.white70, // Light text color
                               ),
                             ),
                           ),
@@ -201,7 +205,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
-        prefixIcon: Icon(icon, color: Colors.blueAccent),
+        prefixIcon: Icon(icon, color: Colors.teal), // Teal icon color
         filled: true,
         fillColor: Colors.grey[100],
         border: OutlineInputBorder(
@@ -210,7 +214,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
-          borderSide: const BorderSide(color: Colors.blueAccent, width: 2),
+          borderSide: const BorderSide(color: Colors.teal, width: 2),
         ),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
       ),
