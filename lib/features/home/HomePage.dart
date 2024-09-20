@@ -1,5 +1,5 @@
 import 'package:barber/features/Search_barber_page/search_barber_page.dart';
-import 'package:barber/features/reservation/Calendar%20Page.dart';
+import 'package:barber/features/appoinments/Calendar%20Page.dart';
 import 'package:flutter/material.dart';
 import 'package:barber/features/profile/profile_page.dart';
 import 'package:barber/features/reservation/appointments_page.dart';
@@ -18,11 +18,12 @@ class _HomePageState extends State<HomePage> {
   late final List<Widget> _pages;
 
   @override
+  @override
   void initState() {
     super.initState();
     _pages = [
       const SearchBarberPage(),
-      AppointmentPage(appointments: _appointments),
+      AppointmentPage(appointments: _appointments), // AppointmentSummaryPage
       ProfilePage(appointments: _appointments),
     ];
   }
@@ -54,13 +55,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onItemTapped(int index) {
-    if (index == 1) {
-      _navigateToCalendarPage();
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override

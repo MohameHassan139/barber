@@ -20,81 +20,92 @@ class _DataPreferencesPageState extends State<DataPreferencesPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Data Preferences'),
-        backgroundColor: Colors.blueGrey[900],
+        backgroundColor: Colors.teal[700], // Change to a calm color
         elevation: 8,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: ListView(
-          children: [
-            _buildPreferenceTile(
-              title: 'Receive Marketing Email',
-              subtitle: 'Stay updated with promotional offers via email.',
-              value: _receiveMarketingEmail,
-              onChanged: (value) {
-                setState(() {
-                  _receiveMarketingEmail = value;
-                });
-              },
-            ),
-            _buildPreferenceTile(
-              title: 'Receive Marketing SMS',
-              subtitle: 'Receive SMS notifications for exclusive offers.',
-              value: _receiveMarketingSMS,
-              onChanged: (value) {
-                setState(() {
-                  _receiveMarketingSMS = value;
-                });
-              },
-            ),
-            _buildPreferenceTile(
-              title: 'Receive Satisfaction Surveys',
-              subtitle: 'Provide feedback to improve our services.',
-              value: _receiveSatisfactionSurveys,
-              onChanged: (value) {
-                setState(() {
-                  _receiveSatisfactionSurveys = value;
-                });
-              },
-            ),
-            _buildPreferenceTile(
-              title: 'Push Notifications',
-              subtitle: 'Get notified about upcoming appointments and offers.',
-              value: _pushNotifications,
-              onChanged: (value) {
-                setState(() {
-                  _pushNotifications = value;
-                });
-              },
-            ),
-            _buildPreferenceTile(
-              title: 'Medical Data Consent',
-              subtitle: 'Consent to share medical data for tailored services.',
-              value: _medicalDataConsent,
-              onChanged: (value) {
-                setState(() {
-                  _medicalDataConsent = value;
-                });
-              },
-            ),
-            const SizedBox(height: 5),
-            Center(
-              child: TextButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) => const PrivacyPolicyPage(),
-                  );
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.teal[100]!, Colors.teal[200]!],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: ListView(
+            children: [
+              _buildPreferenceTile(
+                title: 'Receive Marketing Email',
+                subtitle: 'Stay updated with promotional offers via email.',
+                value: _receiveMarketingEmail,
+                onChanged: (value) {
+                  setState(() {
+                    _receiveMarketingEmail = value;
+                  });
                 },
-                child: Text(
-                  'Privacy Policy',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Colors.blueAccent,
-                      ),
+              ),
+              _buildPreferenceTile(
+                title: 'Receive Marketing SMS',
+                subtitle: 'Receive SMS notifications for exclusive offers.',
+                value: _receiveMarketingSMS,
+                onChanged: (value) {
+                  setState(() {
+                    _receiveMarketingSMS = value;
+                  });
+                },
+              ),
+              _buildPreferenceTile(
+                title: 'Receive Satisfaction Surveys',
+                subtitle: 'Provide feedback to improve our services.',
+                value: _receiveSatisfactionSurveys,
+                onChanged: (value) {
+                  setState(() {
+                    _receiveSatisfactionSurveys = value;
+                  });
+                },
+              ),
+              _buildPreferenceTile(
+                title: 'Push Notifications',
+                subtitle:
+                    'Get notified about upcoming appointments and offers.',
+                value: _pushNotifications,
+                onChanged: (value) {
+                  setState(() {
+                    _pushNotifications = value;
+                  });
+                },
+              ),
+              _buildPreferenceTile(
+                title: 'Medical Data Consent',
+                subtitle:
+                    'Consent to share medical data for tailored services.',
+                value: _medicalDataConsent,
+                onChanged: (value) {
+                  setState(() {
+                    _medicalDataConsent = value;
+                  });
+                },
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => const PrivacyPolicyPage(),
+                    );
+                  },
+                  child: Text(
+                    'Privacy Policy',
+                    style: TextStyle(
+                      color: Colors.teal[800], // Darker text for visibility
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -107,22 +118,29 @@ class _DataPreferencesPageState extends State<DataPreferencesPage> {
     required ValueChanged<bool> onChanged,
   }) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 2),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       elevation: 5,
       child: ListTile(
-        contentPadding: const EdgeInsets.all(10),
+        contentPadding: const EdgeInsets.all(7),
         title: Text(
           title,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.teal[900], // Dark text for better readability
+          ),
         ),
-        subtitle: Text(subtitle),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(color: Colors.teal[800]), // Subtle color
+        ),
         trailing: Switch(
           value: value,
           onChanged: onChanged,
-          activeColor: Colors.blueAccent,
+          activeColor: Colors.teal[600], // Active switch color
         ),
       ),
     );

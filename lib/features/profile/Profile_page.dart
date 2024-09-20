@@ -1,8 +1,10 @@
+import 'package:barber/features/appoinments/Appointment_summery_page.dart';
 import 'package:barber/features/data_performance/data_performance_page.dart';
 import 'package:barber/features/favourite/favorites_page.dart';
+import 'package:barber/features/favourite/favorites_provide.dart';
 import 'package:barber/features/profile/user_details_page.dart';
-import 'package:barber/features/reservation/Appointment_summery_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   final List<Map<String, dynamic>> appointments;
@@ -15,14 +17,14 @@ class ProfilePage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          // Calmer Gradient Background
+          // Gradient Background
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color(0xFFB2DFDB),
-                  Color(0xFF80CBC4)
-                ], // Softer teal shades
+                  Color(0xFFB3E5FC),
+                  Color(0xFFE1F5FE)
+                ], // Use colors from SalonDetailPage
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -30,40 +32,39 @@ class ProfilePage extends StatelessWidget {
           ),
           // Profile Content
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Avatar with Gradient Border
                 Container(
-                  padding: const EdgeInsets.all(4), // Border size
+                  padding: const EdgeInsets.all(6), // Border size
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Color(0xFFB2DFDB), Color(0xFF80CBC4)],
+                      colors: [Color(0xFFB3E5FC), Color(0xFFE1F5FE)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     shape: BoxShape.circle,
                   ),
                   child: const CircleAvatar(
-                    radius: 50,
+                    radius: 55,
                     backgroundColor: Colors.blueGrey,
                     child: Text(
                       "IR", // User's initials
-                      style: TextStyle(fontSize: 35, color: Colors.white),
+                      style: TextStyle(fontSize: 40, color: Colors.white),
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 const Text(
                   "Islam Ragab Ahmed", // User's name
                   style: TextStyle(
-                    fontSize: 26,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Colors.blueGrey,
                   ),
                 ),
-                const SizedBox(height: 20),
 
                 // Profile Options
                 Expanded(
@@ -75,7 +76,7 @@ class ProfilePage extends StatelessWidget {
                         "Your Details",
                         () => _navigateToUserDetails(context),
                       ),
-                      _buildStylishFavoriteButton(
+                      _buildStylishListTile(
                         context,
                         Icons.favorite,
                         "Favorites",
@@ -110,80 +111,45 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // Method to style the ListTile (for other buttons)
+  // Method to style the ListTile (for all buttons)
   Widget _buildStylishListTile(
       BuildContext context, IconData icon, String title, Function onTap) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin:
+          const EdgeInsets.symmetric(vertical: 5), // Reduced vertical margin
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius:
+            BorderRadius.circular(15), // Slightly reduced border radius
       ),
-      elevation: 8,
-      shadowColor: Colors.blueGrey.withOpacity(0.3),
-      child: ListTile(
-        leading: Container(
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: Colors.blueGrey[900],
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, color: Colors.white, size: 25),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.blueGrey,
-          ),
-        ),
-        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.blueGrey),
-        onTap: () => onTap(),
-        tileColor: Colors.white,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-      ),
-    );
-  }
-
-  // Method to style the "Favorites" button with special effects
-  Widget _buildStylishFavoriteButton(
-      BuildContext context, IconData icon, String title, Function onTap) {
-    return GestureDetector(
-      onTap: () => onTap(),
-      child: Card(
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        elevation: 10,
-        shadowColor: Colors.blueGrey.withOpacity(0.3),
+      elevation: 6, // Reduced elevation for a smaller effect
+      shadowColor: Colors.blueGrey.withOpacity(0.3), // Softer shadow
+      child: SizedBox(
+        height: 60, // Reduced height for smaller cards
         child: ListTile(
           leading: Container(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0), // Reduced padding for icon
             decoration: BoxDecoration(
               color: Colors.blueGrey[900],
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: Colors.white, size: 25),
+            child: Icon(icon, color: Colors.white, size: 24), // Smaller icon
           ),
           title: Text(
             title,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 14, // Reduced font size
               fontWeight: FontWeight.bold,
               color: Colors.blueGrey,
             ),
           ),
           trailing: const Icon(Icons.arrow_forward_ios, color: Colors.blueGrey),
+          onTap: () => onTap(),
           tileColor: Colors.white,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16.0, vertical: 10.0), // Slightly reduced padding
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(
+                15.0), // Consistent border radius with card
           ),
         ),
       ),
@@ -199,12 +165,14 @@ class ProfilePage extends StatelessWidget {
   }
 
   void _navigateToFavorites(BuildContext context) {
+    final favoritesProvider =
+        Provider.of<FavoritesProvider>(context, listen: false);
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => const FavoritesPage(
-                favoriteShops: [],
-              )),
+        builder: (context) =>
+            FavoritesPage(favoriteShops: favoritesProvider.favoriteShops),
+      ),
     );
   }
 

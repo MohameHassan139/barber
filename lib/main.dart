@@ -1,8 +1,15 @@
+import 'package:barber/features/favourite/favorites_provide.dart';
 import 'package:barber/features/home/HomePage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const BarberApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => FavoritesProvider(),
+      child: const BarberApp(),
+    ),
+  );
 }
 
 class BarberApp extends StatelessWidget {
