@@ -1,5 +1,6 @@
 import 'package:barber/features/Search_barber_page/salon_detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart'; // Import the animation package
 
 class SearchBarberPage extends StatefulWidget {
   const SearchBarberPage({super.key});
@@ -55,7 +56,7 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Elevated and Stylish Search Bar with Gradient Border
+            // Elevated and Stylish Search Bar with Gradient Border + Scale Animation
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -86,15 +87,24 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
                   fillColor: Colors.white,
                 ),
               ),
-            ),
+            )
+                .animate()
+                .scale(
+                    duration: 500.ms,
+                    curve: Curves.easeInOut) // Add scaling effect
+                .fadeIn(delay: 200.ms, duration: 500.ms), // Fade in effect
             const SizedBox(height: 20),
-            // Stylish List of Search Results with Gradient Cards
+            // Stylish List of Search Results with Gradient Cards and Fade Animation
             Expanded(
               child: ListView(
                 children: _filteredBarberShops.isNotEmpty
                     ? _filteredBarberShops
-                        .map((shop) =>
-                            _buildClickableBarberShopCard(context, shop))
+                        .asMap()
+                        .entries
+                        .map(
+                          (entry) => _buildClickableBarberShopCard(
+                              context, entry.value, entry.key),
+                        )
                         .toList()
                     : [
                         Center(
@@ -115,8 +125,9 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
     );
   }
 
+  // Clickable BarberShop Card with Transition
   Widget _buildClickableBarberShopCard(
-      BuildContext context, Map<String, String> shop) {
+      BuildContext context, Map<String, String> shop, int index) {
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -134,7 +145,10 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
         title: shop["title"]!,
         subtitle: shop["subtitle"]!,
         icon: Icons.store,
-      ),
+      )
+          .animate(delay: (index * 100).ms) // Delayed fade-in for each item
+          .fadeIn(duration: 500.ms) // Fade in effect
+          .slideY(begin: 0.2, duration: 500.ms), // Slide effect from below
     );
   }
 

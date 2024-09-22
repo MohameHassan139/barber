@@ -1,5 +1,4 @@
-import 'package:barber/features/appoinments/Calendar%20Page.dart';
-import 'package:barber/features/favourite/favorites_page.dart';
+import 'package:barber/features/appoinments/Calendar Page.dart';
 import 'package:barber/features/favourite/favorites_provide.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -19,19 +18,43 @@ class SalonDetailPage extends StatefulWidget {
   _SalonDetailPageState createState() => _SalonDetailPageState();
 }
 
-class _SalonDetailPageState extends State<SalonDetailPage> {
+class _SalonDetailPageState extends State<SalonDetailPage>
+    with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey _servicesKey = GlobalKey();
   final GlobalKey _reviewsKey = GlobalKey();
   final GlobalKey _aboutKey = GlobalKey();
-  final GlobalKey _locationKey = GlobalKey(); // New key for location section
+  final GlobalKey _locationKey = GlobalKey();
 
   List<bool> selectedServices = List.filled(4, false);
-  double? userRating = 0.0; // Start with zero stars
+  double? userRating = 0.0;
+
+  late AnimationController _buttonAnimationController;
+  late Animation<double> _buttonScaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _buttonAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _buttonScaleAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(
+      CurvedAnimation(
+        parent: _buttonAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _buttonAnimationController.dispose();
+    super.dispose();
+  }
 
   void _toggleFavorite() {
     final provider = Provider.of<FavoritesProvider>(context, listen: false);
-
     final isFavorited = provider.isFavorite({
       'title': widget.title,
       'subtitle': widget.subtitle,
@@ -48,17 +71,6 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
         'subtitle': widget.subtitle,
       });
     }
-  }
-
-  void _viewFavorites() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => FavoritesPage(
-          favoriteShops: [],
-        ),
-      ),
-    );
   }
 
   void _scrollToSection(GlobalKey key) {
@@ -81,6 +93,7 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<FavoritesProvider>(context);
+    final isAnyServiceSelected = selectedServices.any((selected) => selected);
 
     return Scaffold(
       appBar: AppBar(
@@ -127,11 +140,14 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12.0),
-                    child: Image.asset(
-                      'assets/images/salon1.jpeg',
-                      height: 200,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+                    child: Hero(
+                      tag: 'salon_image',
+                      child: Image.asset(
+                        'assets/images/salon1.jpeg',
+                        height: 200,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -152,39 +168,41 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Rating bar with the save feature
                       RatingBar.builder(
                         initialRating: userRating!,
                         minRating: 0,
                         direction: Axis.horizontal,
                         itemCount: 5,
-                        itemSize: 24,
+                        itemSize:
+                            30, // Increased star size for better visibility
                         unratedColor: Colors.grey[300],
                         itemBuilder: (context, _) => const Icon(
                           Icons.star,
-                          color: Colors.amber,
+                          color: Colors.amber, // Star color
                         ),
                         onRatingUpdate: (rating) {
                           setState(() {
-                            userRating = rating; // Save the rating
+                            userRating = rating;
                           });
                         },
                       ),
-                      ElevatedButton(
-                        onPressed: userRating! > 0
-                            ? () {
-                                // Submit the rating (you can define your submission logic here)
-                                print("Rating submitted: $userRating stars");
-                              }
-                            : null,
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.teal,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
+                      ScaleTransition(
+                        scale: _buttonScaleAnimation,
+                        child: ElevatedButton(
+                          onPressed: userRating! > 0
+                              ? () {
+                                  print("Rating submitted: $userRating stars");
+                                }
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.teal,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
                           ),
+                          child: const Text('Submit'),
                         ),
-                        child: const Text('Submit'),
                       ),
                     ],
                   ),
@@ -203,8 +221,7 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
                               TextStyle(fontSize: 16, color: Colors.black54)),
                       IconButton(
                         icon: const Icon(Icons.arrow_downward),
-                        onPressed: () => _scrollToSection(
-                            _aboutKey), // Scroll to about section
+                        onPressed: () => _scrollToSection(_aboutKey),
                       ),
                     ],
                   ),
@@ -218,7 +235,7 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
                     ],
                   ),
                   const SizedBox(height: 24),
-                  _sectionHeader('Popular Services'),
+                  _sectionHeader('Select Services'),
                   Container(
                     key: _servicesKey,
                     child: Column(
@@ -275,7 +292,7 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         const SizedBox(height: 8),
                         ClipRRect(
-                          key: _locationKey, // Key for scrolling to map
+                          key: _locationKey,
                           borderRadius: BorderRadius.circular(12.0),
                           child: Image.asset(
                             'assets/images/map1.jpg',
@@ -291,28 +308,21 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
               ),
             ),
           ),
-          if (selectedServices
-              .contains(true)) // Show button only if a service is selected
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  onPressed: _goToAppointmentPage,
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.teal,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: 32.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                  ),
-                  child: const Text(
-                    'Book Appointment',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
+          if (isAnyServiceSelected)
+            Positioned(
+              bottom: 16,
+              left: 16,
+              right: 16,
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  _goToAppointmentPage();
+                  _buttonAnimationController.forward().then((value) {
+                    _buttonAnimationController.reverse();
+                  });
+                },
+                label: const Text('Book Appointment'),
+                icon: const Icon(Icons.calendar_today),
+                backgroundColor: Colors.teal,
               ),
             ),
         ],
@@ -320,128 +330,87 @@ class _SalonDetailPageState extends State<SalonDetailPage> {
     );
   }
 
-  // Helper method for section buttons (e.g., Services, Reviews, About)
-  Widget _sectionButton(String label, GlobalKey key) {
+  Widget _sectionButton(String title, GlobalKey key) {
     return GestureDetector(
       onTap: () => _scrollToSection(key),
-      child: Column(
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.teal,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Container(
-            height: 4,
-            width: 60,
-            color: Colors.teal,
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Helper method for popular services section
-  Widget _serviceTile(
-      int index, String title, String description, String price) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedServices[index] = !selectedServices[index];
-        });
-      },
-      child: Card(
-        elevation: 2,
-        child: ListTile(
-          leading: Checkbox(
-            value: selectedServices[index],
-            onChanged: (bool? value) {
-              setState(() {
-                selectedServices[index] = value ?? false;
-              });
-            },
-          ),
-          title:
-              Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-          subtitle: Text(description),
-          trailing: Text(price,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.black)),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+        decoration: BoxDecoration(
+          color: Colors.teal,
+          borderRadius: BorderRadius.circular(12.0),
         ),
-      ),
-    );
-  }
-
-  // Helper method for the reviews section
-  Widget _reviewTile(String reviewer, String review, int rating) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.teal,
         child: Text(
-          reviewer[0],
-          style: const TextStyle(color: Colors.white),
+          title,
+          style: const TextStyle(color: Colors.white, fontSize: 16),
         ),
-      ),
-      title: Text(reviewer),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(review),
-          const SizedBox(height: 4),
-          RatingBar.builder(
-            initialRating: rating.toDouble(),
-            minRating: 1,
-            direction: Axis.horizontal,
-            itemCount: 5,
-            itemSize: 18,
-            ignoreGestures: true,
-            allowHalfRating: false,
-            itemBuilder: (context, _) => const Icon(
-              Icons.star,
-              color: Colors.amber,
-            ),
-            onRatingUpdate: (rating) {},
-          ),
-        ],
       ),
     );
   }
 
-  // Helper method for opening hours
+  Widget _sectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _serviceTile(
+      int index, String service, String duration, String price) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      child: ListTile(
+        title: Text(service),
+        subtitle: Text(duration),
+        trailing: Text(price),
+        onTap: () {
+          setState(() {
+            selectedServices[index] = !selectedServices[index];
+          });
+        },
+        tileColor: selectedServices[index]
+            ? Colors.teal.withOpacity(0.3)
+            : null, // Increased opacity for better visibility
+      ),
+    );
+  }
+
+  Widget _reviewTile(String reviewer, String comment, int rating) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      child: ListTile(
+        title: Text(reviewer),
+        subtitle: Text(comment),
+        trailing: RatingBarIndicator(
+          rating: rating.toDouble(),
+          itemCount: 5,
+          itemSize: 20,
+          direction: Axis.horizontal,
+          itemBuilder: (context, _) => const Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _openingHoursRow(String day, String hours, Color color) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            day,
-            style: const TextStyle(fontSize: 16, color: Colors.black87),
-          ),
-          Text(
-            hours,
-            style: TextStyle(fontSize: 16, color: color),
-          ),
+          Text(day, style: const TextStyle(fontSize: 16)),
+          Text(hours, style: TextStyle(fontSize: 16, color: color)),
         ],
-      ),
-    );
-  }
-
-  // Helper method for the section header
-  Widget _sectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.teal,
-        ),
       ),
     );
   }

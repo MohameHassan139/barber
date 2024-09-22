@@ -1,8 +1,7 @@
 import 'package:barber/features/Search_barber_page/search_barber_page.dart';
-import 'package:barber/features/appoinments/Calendar%20Page.dart';
+import 'package:barber/features/appoinments/Appointment_summery_page.dart';
 import 'package:flutter/material.dart';
 import 'package:barber/features/profile/profile_page.dart';
-import 'package:barber/features/reservation/appointments_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,40 +17,14 @@ class _HomePageState extends State<HomePage> {
   late final List<Widget> _pages;
 
   @override
-  @override
   void initState() {
     super.initState();
     _pages = [
       const SearchBarberPage(),
-      AppointmentPage(appointments: _appointments), // AppointmentSummaryPage
+      AppointmentSummaryPage(
+          appointments: _appointments), // AppointmentSummaryPage
       ProfilePage(appointments: _appointments),
     ];
-  }
-
-  Future<void> _navigateToCalendarPage() async {
-    final result = await Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            const CalendarPage(
-          bookedDates: [], // Pass bookedDates if needed
-        ),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(1.0, 0.0);
-          const end = Offset.zero;
-          const curve = Curves.easeInOut;
-          var tween = Tween(begin: begin, end: end);
-          var offsetAnimation =
-              animation.drive(tween.chain(CurveTween(curve: curve)));
-          return SlideTransition(position: offsetAnimation, child: child);
-        },
-      ),
-    );
-    if (result != null && result is Map<String, dynamic>) {
-      setState(() {
-        _appointments.add(result); // Add new appointment to the list
-      });
-    }
   }
 
   void _onItemTapped(int index) {
