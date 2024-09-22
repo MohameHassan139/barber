@@ -91,7 +91,7 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
                 .animate()
                 .scale(
                     duration: 500.ms,
-                    curve: Curves.easeInOut) // Add scaling effect
+                    curve: Curves.bounceIn) // Add scaling effect
                 .fadeIn(delay: 200.ms, duration: 500.ms), // Fade in effect
             const SizedBox(height: 20),
             // Stylish List of Search Results with Gradient Cards and Fade Animation
