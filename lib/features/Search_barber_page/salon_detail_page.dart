@@ -90,6 +90,16 @@ class _SalonDetailPageState extends State<SalonDetailPage>
     );
   }
 
+  void _showRatingMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Rating submitted: $userRating stars!'),
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.teal,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<FavoritesProvider>(context);
@@ -173,12 +183,11 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                         minRating: 0,
                         direction: Axis.horizontal,
                         itemCount: 5,
-                        itemSize:
-                            30, // Increased star size for better visibility
+                        itemSize: 30,
                         unratedColor: Colors.grey[300],
                         itemBuilder: (context, _) => const Icon(
                           Icons.star,
-                          color: Colors.amber, // Star color
+                          color: Colors.amber,
                         ),
                         onRatingUpdate: (rating) {
                           setState(() {
@@ -191,7 +200,7 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                         child: ElevatedButton(
                           onPressed: userRating! > 0
                               ? () {
-                                  print("Rating submitted: $userRating stars");
+                                  _showRatingMessage();
                                 }
                               : null,
                           style: ElevatedButton.styleFrom(
@@ -297,7 +306,6 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                           child: Image.asset(
                             'assets/images/map1.jpg',
                             width: double.infinity,
-                            height: 200,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -308,110 +316,92 @@ class _SalonDetailPageState extends State<SalonDetailPage>
               ),
             ),
           ),
-          if (isAnyServiceSelected)
-            Positioned(
-              bottom: 16,
-              left: 16,
-              right: 16,
-              child: FloatingActionButton.extended(
-                onPressed: () {
-                  _goToAppointmentPage();
-                  _buttonAnimationController.forward().then((value) {
-                    _buttonAnimationController.reverse();
-                  });
-                },
-                label: const Text('Book Appointment'),
-                icon: const Icon(Icons.calendar_today),
-                backgroundColor: Colors.teal,
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.all(16.0),
+              color: Colors.white,
+              child: ElevatedButton(
+                onPressed: isAnyServiceSelected ? _goToAppointmentPage : null,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  backgroundColor: Colors.teal,
+                ),
+                child: const Text(
+                  'Book Now',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
               ),
             ),
+          ),
         ],
       ),
     );
   }
 
   Widget _sectionButton(String title, GlobalKey key) {
-    return GestureDetector(
-      onTap: () => _scrollToSection(key),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-        decoration: BoxDecoration(
-          color: Colors.teal,
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Text(
-          title,
-          style: const TextStyle(color: Colors.white, fontSize: 16),
-        ),
+    return ElevatedButton(
+      onPressed: () => _scrollToSection(key),
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.teal,
       ),
+      child: Text(title),
     );
   }
 
   Widget _sectionHeader(String title) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Text(
         title,
-        style: const TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
-        ),
+        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
       ),
     );
   }
 
-  Widget _serviceTile(
-      int index, String service, String duration, String price) {
-    return Card(
-      elevation: 4,
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      child: ListTile(
-        title: Text(service),
-        subtitle: Text(duration),
-        trailing: Text(price),
-        onTap: () {
+  Widget _serviceTile(int index, String title, String subtitle, String price) {
+    return ListTile(
+      title: Text(title),
+      subtitle: Text(subtitle),
+      trailing: Text(price),
+      leading: Checkbox(
+        value: selectedServices[index],
+        onChanged: (bool? value) {
           setState(() {
-            selectedServices[index] = !selectedServices[index];
+            selectedServices[index] = value!;
           });
         },
-        tileColor: selectedServices[index]
-            ? Colors.teal.withOpacity(0.3)
-            : null, // Increased opacity for better visibility
       ),
     );
   }
 
-  Widget _reviewTile(String reviewer, String comment, int rating) {
-    return Card(
-      elevation: 4,
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      child: ListTile(
-        title: Text(reviewer),
-        subtitle: Text(comment),
-        trailing: RatingBarIndicator(
-          rating: rating.toDouble(),
-          itemCount: 5,
-          itemSize: 20,
-          direction: Axis.horizontal,
-          itemBuilder: (context, _) => const Icon(
-            Icons.star,
-            color: Colors.amber,
-          ),
+  Widget _reviewTile(String reviewer, String review, double rating) {
+    return ListTile(
+      title: Text(reviewer),
+      subtitle: Text(review),
+      trailing: RatingBarIndicator(
+        rating: rating,
+        itemCount: 5,
+        itemSize: 20.0,
+        unratedColor: Colors.grey[300],
+        itemBuilder: (context, _) => const Icon(
+          Icons.star,
+          color: Colors.amber,
         ),
       ),
     );
   }
 
   Widget _openingHoursRow(String day, String hours, Color color) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(day, style: const TextStyle(fontSize: 16)),
-          Text(hours, style: TextStyle(fontSize: 16, color: color)),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(day, style: const TextStyle(fontSize: 16)),
+        Text(hours, style: TextStyle(fontSize: 16, color: color)),
+      ],
     );
   }
 }
