@@ -92,9 +92,9 @@ class _SalonDetailPageState extends State<SalonDetailPage>
 
   void _showRatingMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Rating submitted: $userRating stars!'),
-        duration: const Duration(seconds: 2),
+      const SnackBar(
+        content: Text('Thank you for your rating!'),
+        duration: Duration(seconds: 2),
         backgroundColor: Colors.teal,
       ),
     );
