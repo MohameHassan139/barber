@@ -91,9 +91,13 @@ class LoginScreen extends StatelessWidget {
                                     }
                                   },
                                 ),
+                          SizedBox(
+                            height: 20,
+                          ),
                           if (state is LoginEmailNotVerified)
                             Container(
-                              color: Colors.amber[600],
+                              color: Color.fromARGB(255, 0, 26, 255),
+
                               height: 50,
                               width: double.infinity,
                               child: Padding(

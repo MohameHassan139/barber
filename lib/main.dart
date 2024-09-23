@@ -2,6 +2,7 @@ import 'package:barber/features/add_service/controller/get_service_cubit/get_ser
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'core/utils/cashe_helper.dart';
 import 'features/add_service/controller/add_service_cubit/add_service_cubit.dart';
 import 'features/add_service/firebase_sevice_helper.dart';
 import 'features/add_service/view/add_service_screen.dart';
@@ -12,6 +13,7 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  CacheHelper.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -43,7 +45,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: ViewServiceScreen(),
+        home: const UserTypeScreen(),
       ),
     );
   }

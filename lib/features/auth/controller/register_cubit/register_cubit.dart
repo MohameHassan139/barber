@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../../core/utils/cashe_helper.dart';
 import '../../models/user_model.dart';
 
 class RegisterState {
@@ -65,6 +66,7 @@ class RegisterCubit extends Cubit<RegisterState> {
               password: passwordTextController.text)
           .then((value) async {
         value.user?.sendEmailVerification();
+        CacheHelper.setEmail(emailTextController.text);
 
         userId = FirebaseAuth.instance.currentUser?.uid;
         model = CreateUserModel(

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:barber/core/utils/cashe_helper.dart';
 import 'package:barber/features/add_service/model/sevice_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,10 +9,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 
 class FirebaseSeviceHelper {
-  String email = FirebaseAuth.instance.currentUser!.email!;
+  String email = CacheHelper.getEmail()!;
   CollectionReference barberService = FirebaseFirestore.instance
       .collection('Barbers')
-      .doc(FirebaseAuth.instance.currentUser!.email)
+      .doc(CacheHelper.getEmail())
       .collection('Services');
   final storage = FirebaseStorage.instance;
   int rand = Random().nextInt(9999999);

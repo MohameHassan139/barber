@@ -24,11 +24,22 @@ class LoginCubit extends Cubit<LoginState> {
           .signInWithEmailAndPassword(email: email, password: password);
 
       if (!userCredential.user!.emailVerified) {
+      
         emit(LoginEmailNotVerified());
       } else {
-        String userId = userCredential.user!.uid;
-        CacheHelper.prefs?.setString('userId', userId);
-        await getUserData(userId);
+       
+        
+        CacheHelper.setEmail(email);
+        documentExists(email).then((value) {
+          if (value) {
+            // barber ui
+            // TODO
+          } else {
+            // user ui
+            // TODO
+          }
+        });
+
         emit(LoginSuccess());
       }
     } catch (e) {
@@ -36,6 +47,18 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+  Future<bool> documentExists(String documentId) async {
+    try {
+      final DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('barber_services')
+          .doc(documentId)
+          .get();
+      return doc.exists;
+    } catch (e) {
+      print('Error checking document existence: $e');
+      return false;
+    }
+  }
 
   void togglePasswordVisibility() {
     isPasswordVisible = !isPasswordVisible;
@@ -45,42 +68,9 @@ class LoginCubit extends Cubit<LoginState> {
     emit(LoginPasswordVisibilityChanged());
   }
 
-  Future<void> getUserData(String userId) async {
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-    DocumentSnapshot userSnapshot = await users.doc(userId).get();
-    UserDataModel userModel =
-        UserDataModel.fromJson(userSnapshot.data() as Map<String, dynamic>);
-    // CacheHelper.addUserDataToPrefs(userModel: userModel);
-  }
 
   void sendEmailVerification() {
     FirebaseAuth.instance.currentUser?.sendEmailVerification();
     emit(EmailVerificationSent());
   }
-
-  String? validInput(String value, int minLength, int maxLength, String type) {
-    if (value.isEmpty) {
-      return 'This field is required';
-    }
-
-    if (value.length < minLength) {
-      return 'The input is too short. Minimum $minLength characters';
-    }
-
-    if (value.length > maxLength) {
-      return 'The input is too long. Maximum $maxLength characters';
-    }
-
-    if (type == 'email' &&
-        !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'Please enter a valid email';
-    }
-
-    if (type == 'password' && value.length < 6) {
-      return 'Password must be at least 6 characters';
-    }
-
-    return null;
-  }
-
 }

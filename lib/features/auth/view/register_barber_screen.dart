@@ -9,6 +9,7 @@ import '../../../core/component/custom_botton.dart';
 import '../../../core/component/custom_textformfield.dart';
 import '../controller/register_barber_cubit/register_barber_cubit.dart';
 import '../controller/register_barber_cubit/register_barner_state.dart';
+import 'login_screen.dart';
 
 class RegistrationBarberScreen extends StatelessWidget {
   const RegistrationBarberScreen({Key? key}) : super(key: key);
@@ -227,12 +228,30 @@ class RegistrationBarberScreen extends StatelessWidget {
                                     controller.passwordTextController.text,
                                 bio: controller.bioController.text,
                                 phone: controller.phoneController.text,
+                                context: context,
                               );
                             }
                           }
                         },
                         text: 'Register',
                       ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('Already have an account? '),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return LoginScreen();
+                              }));
+                            },
+                            child: const Text('Log in'),
+                          ),
+                        ],
+                      ),
+                      
                     ],
                   ),
                 ),

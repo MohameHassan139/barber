@@ -119,7 +119,7 @@ class RegisterScreen extends StatelessWidget {
                                 cubit.signUp();
                               },
                             ),
-                      const SizedBox(height: 20),
+                      
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
