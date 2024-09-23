@@ -1,19 +1,41 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class UserDetailsPage extends StatefulWidget {
-  const UserDetailsPage({super.key});
-
+  const UserDetailsPage({
+    super.key,
+    required this.bio,
+    required this.name,
+    required this.phone,
+  });
+  final String phone;
+  final String name;
+  final String bio;
   @override
   State<UserDetailsPage> createState() => _UserDetailsPageState();
 }
 
 class _UserDetailsPageState extends State<UserDetailsPage> {
+  late TextEditingController nameController;
+  late TextEditingController bioController;
+  late TextEditingController phoneController;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    nameController = TextEditingController(text: widget.name);
+
+    bioController = TextEditingController(text: widget.bio);
+    phoneController = TextEditingController(text: widget.phone);
+
+    super.initState();
+  }
+
   final _formKey = GlobalKey<FormState>();
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
-  final _cellNumberController = TextEditingController();
-  final _emailController = TextEditingController();
+
   CountryCode? _selectedCountryCode;
 
   bool isNumeric(String str) {
@@ -65,22 +87,12 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                     children: [
                       // First Name Field
                       _buildCustomTextField(
-                        controller: _firstNameController,
+                        controller: nameController,
                         labelText: 'First Name',
                         hintText: 'Enter your first name',
                         icon: Icons.person,
                       ),
                       const SizedBox(height: 16),
-
-                      // Last Name Field
-                      _buildCustomTextField(
-                        controller: _lastNameController,
-                        labelText: 'Last Name',
-                        hintText: 'Enter your last name',
-                        icon: Icons.person_outline,
-                      ),
-                      const SizedBox(height: 16),
-
                       // Phone Number with Country Code
                       Row(
                         children: [
@@ -98,13 +110,13 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                           const SizedBox(width: 3),
                           Expanded(
                             child: _buildCustomTextField(
-                              controller: _cellNumberController,
-                              labelText: 'Cell Number',
-                              hintText: 'Enter your cell number',
+                              controller: phoneController,
+                              labelText: 'phone Number',
+                              hintText: 'Enter your phone number',
                               icon: Icons.phone,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'Please enter your cell number';
+                                  return 'Please enter your phone number';
                                 }
                                 if (!isNumeric(value)) {
                                   return 'Please enter a valid number';
@@ -119,19 +131,19 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
 
                       // Email Field
                       _buildCustomTextField(
-                        controller: _emailController,
-                        labelText: 'Email',
-                        hintText: 'Enter your email',
-                        icon: Icons.email,
+                        controller: bioController,
+                        labelText: 'bio',
+                        hintText: 'Enter your bio',
+                        icon: Icons.ballot_rounded,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter your email';
+                            return 'Please enter your bio';
                           }
-                          if (!RegExp(
-                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z]+")
-                              .hasMatch(value)) {
-                            return 'Please enter a valid email';
-                          }
+                          // if (!RegExp(
+                          //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z]+")
+                          //     .hasMatch(value)) {
+                          //   return 'Please enter a valid bio';
+                          // }
                           return null;
                         },
                       ),
@@ -141,11 +153,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            print('First name: ${_firstNameController.text}');
-                            print('Last name: ${_lastNameController.text}');
-                            print(
-                                'Cell number: ${_selectedCountryCode?.dialCode ?? ''} ${_cellNumberController.text}');
-                            print('Email: ${_emailController.text}');
+                            updateProfile();
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -226,5 +234,17 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             return null;
           },
     );
+  }
+
+  void updateProfile() async {
+    await firestore
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+      'name': nameController.text,
+      'phone': phoneController.text,
+      'bio': bioController.text,
+    });
+    Navigator.pop(context);
   }
 }
