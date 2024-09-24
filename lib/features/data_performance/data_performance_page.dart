@@ -17,10 +17,12 @@ class _DataPreferencesPageState extends State<DataPreferencesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Data Preferences'),
-        backgroundColor: Colors.teal[700], // Change to a calm color
+        backgroundColor: Colors.teal[700],
         elevation: 8,
       ),
       body: Container(
@@ -32,7 +34,7 @@ class _DataPreferencesPageState extends State<DataPreferencesPage> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           child: ListView(
             children: [
               _buildPreferenceTile(
@@ -98,8 +100,9 @@ class _DataPreferencesPageState extends State<DataPreferencesPage> {
                   child: Text(
                     'Privacy Policy',
                     style: TextStyle(
-                      color: Colors.teal[800], // Darker text for visibility
+                      color: Colors.teal[800],
                       fontWeight: FontWeight.bold,
+                      fontSize: screenWidth * 0.04, // Responsive font size
                     ),
                   ),
                 ),
@@ -118,29 +121,37 @@ class _DataPreferencesPageState extends State<DataPreferencesPage> {
     required ValueChanged<bool> onChanged,
   }) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 5),
+      margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(context).size.height *
+              0.009), // Responsive vertical margin
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       elevation: 5,
       child: ListTile(
-        contentPadding: const EdgeInsets.all(7),
+        contentPadding: const EdgeInsets.all(
+            10), // Adjusted padding for better touch target
         title: Text(
           title,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: MediaQuery.of(context).size.width *
+                0.042, // Responsive title font size
             fontWeight: FontWeight.bold,
-            color: Colors.teal[900], // Dark text for better readability
+            color: Colors.teal[900],
           ),
         ),
         subtitle: Text(
           subtitle,
-          style: TextStyle(color: Colors.teal[800]), // Subtle color
+          style: TextStyle(
+            color: Colors.teal[800],
+            fontSize: MediaQuery.of(context).size.width *
+                0.032, // Responsive subtitle font size
+          ),
         ),
         trailing: Switch(
           value: value,
           onChanged: onChanged,
-          activeColor: Colors.teal[600], // Active switch color
+          activeColor: Colors.teal[600],
         ),
       ),
     );

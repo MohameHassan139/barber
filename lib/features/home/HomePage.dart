@@ -21,13 +21,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _pages = [
       const SearchBarberPage(),
-      AppointmentSummaryPage(
-          appointments: _appointments), // AppointmentSummaryPage
+      AppointmentSummaryPage(appointments: _appointments),
       ProfilePage(appointments: _appointments),
     ];
   }
 
   void _onItemTapped(int index) {
+    // Update the selected index
     setState(() {
       _selectedIndex = index;
     });
@@ -37,70 +37,70 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF1E1E1E), // Dark background
-      body: Stack(
-        children: [
-          IndexedStack(
-            index: _selectedIndex,
-            children: _pages,
+      body: IndexedStack(
+        index: _selectedIndex, // Keep all pages in an IndexedStack
+        children: _pages,
+      ),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.blueGrey[900]!, Colors.blueGrey[800]!],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.4),
+            spreadRadius: 3,
+            blurRadius: 7,
+            offset: const Offset(0, -4),
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blueGrey[900]!, Colors.blueGrey[800]!],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              spreadRadius: 3,
-              blurRadius: 7,
-              offset: const Offset(0, -4),
-            ),
-          ],
+      child: BottomNavigationBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: Colors.white70,
+        unselectedItemColor: Colors.grey,
+        selectedLabelStyle: const TextStyle(
+          fontFamily: 'Orbitron',
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
         ),
-        child: BottomNavigationBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          selectedItemColor: Colors.white70,
-          unselectedItemColor: Colors.grey,
-          selectedLabelStyle: const TextStyle(
-            fontFamily: 'Orbitron',
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-          ),
-          unselectedLabelStyle: const TextStyle(
-            fontFamily: 'Orbitron',
-            fontSize: 11,
-          ),
-          showUnselectedLabels: true,
-          showSelectedLabels: true,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search_outlined, size: 28),
-              activeIcon: Icon(Icons.search, size: 32),
-              label: 'Search',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today_outlined, size: 28),
-              activeIcon: Icon(Icons.calendar_today, size: 32),
-              label: 'Appointments',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline, size: 28),
-              activeIcon: Icon(Icons.person, size: 32),
-              label: 'Profile',
-            ),
-          ],
+        unselectedLabelStyle: const TextStyle(
+          fontFamily: 'Orbitron',
+          fontSize: 11,
         ),
+        showUnselectedLabels: true,
+        showSelectedLabels: true,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search_outlined, size: 28),
+            activeIcon: Icon(Icons.search, size: 32),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today_outlined, size: 28),
+            activeIcon: Icon(Icons.calendar_today, size: 32),
+            label: 'Appointments',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline, size: 28),
+            activeIcon: Icon(Icons.person, size: 32),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }

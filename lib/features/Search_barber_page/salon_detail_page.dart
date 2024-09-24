@@ -104,6 +104,8 @@ class _SalonDetailPageState extends State<SalonDetailPage>
   Widget build(BuildContext context) {
     final provider = Provider.of<FavoritesProvider>(context);
     final isAnyServiceSelected = selectedServices.any((selected) => selected);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -144,7 +146,7 @@ class _SalonDetailPageState extends State<SalonDetailPage>
           SingleChildScrollView(
             controller: _scrollController,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -154,7 +156,7 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                       tag: 'salon_image',
                       child: Image.asset(
                         'assets/images/salon1.jpeg',
-                        height: 200,
+                        height: screenHeight * 0.25, // Responsive height
                         width: double.infinity,
                         fit: BoxFit.cover,
                       ),
@@ -163,8 +165,8 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                   const SizedBox(height: 16),
                   Text(
                     widget.title,
-                    style: const TextStyle(
-                      fontSize: 24,
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.06, // Responsive font size
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     ),
@@ -172,7 +174,9 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                   const SizedBox(height: 8),
                   Text(
                     widget.subtitle,
-                    style: const TextStyle(fontSize: 18, color: Colors.black54),
+                    style: TextStyle(
+                        fontSize: screenWidth * 0.05,
+                        color: Colors.black54), // Responsive font size
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -183,7 +187,7 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                         minRating: 0,
                         direction: Axis.horizontal,
                         itemCount: 5,
-                        itemSize: 30,
+                        itemSize: screenWidth * 0.07, // Responsive icon size
                         unratedColor: Colors.grey[300],
                         itemBuilder: (context, _) => const Icon(
                           Icons.star,
@@ -307,8 +311,10 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                             'assets/images/map1.jpg',
                             width: double.infinity,
                             fit: BoxFit.cover,
+                            height: screenHeight * 0.5, // Responsive height
                           ),
                         ),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),
@@ -321,7 +327,7 @@ class _SalonDetailPageState extends State<SalonDetailPage>
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
               color: Colors.white,
               child: ElevatedButton(
                 onPressed: isAnyServiceSelected ? _goToAppointmentPage : null,

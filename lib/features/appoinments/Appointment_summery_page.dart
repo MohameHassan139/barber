@@ -7,6 +7,8 @@ class AppointmentSummaryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Appointments"),
@@ -26,7 +28,7 @@ class AppointmentSummaryPage extends StatelessWidget {
             )
           : ListView.builder(
               itemCount: appointments.length,
-              padding: const EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(screenWidth * 0.03), // Responsive padding
               itemBuilder: (context, index) {
                 DateTime date = appointments[index]['date'];
                 TimeOfDay time = appointments[index]['time'];
@@ -35,8 +37,8 @@ class AppointmentSummaryPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  elevation: 8,
-                  shadowColor: Colors.cyanAccent.withOpacity(0.5),
+                  elevation: 5, // Adjusted elevation
+                  shadowColor: Colors.black.withOpacity(0.3),
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   child: Container(
                     decoration: BoxDecoration(
@@ -48,8 +50,9 @@ class AppointmentSummaryPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 15.0),
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.05,
+                          vertical: 15.0), // Responsive padding
                       leading: const Icon(
                         Icons.calendar_today,
                         color: Colors.white,
@@ -57,16 +60,16 @@ class AppointmentSummaryPage extends StatelessWidget {
                       ),
                       title: Text(
                         "Date: ${date.day}/${date.month}/${date.year}",
-                        style: const TextStyle(
-                          fontSize: 20,
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.05, // Responsive font size
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
                       ),
                       subtitle: Text(
                         "Time: ${time.format(context)}",
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.04, // Responsive font size
                           color: Colors.white70,
                         ),
                       ),

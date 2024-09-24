@@ -31,6 +31,8 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Choose Appointment"),
@@ -38,7 +40,7 @@ class _CalendarPageState extends State<CalendarPage> {
         elevation: 10,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(screenWidth * 0.03), // Responsive padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -96,8 +98,10 @@ class _CalendarPageState extends State<CalendarPage> {
                 _selectedTime == null
                     ? "Select Time"
                     : _selectedTime!.format(context),
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: screenWidth * 0.045, // Responsive font size
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               onTap: _pickTime,
               tileColor: Colors.blueGrey[50],
@@ -122,11 +126,11 @@ class _CalendarPageState extends State<CalendarPage> {
                     : null,
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
-                  backgroundColor: Colors.teal, // Text color
-                  elevation: 5, // Shadow
+                  backgroundColor: Colors.teal,
+                  elevation: 5,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30), // Rounded shape
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 child: const Row(

@@ -44,6 +44,9 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 600; // Adjust this threshold as needed
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Search for Barber Shop"),
@@ -52,7 +55,8 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
         elevation: 4,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding:
+            EdgeInsets.all(isSmallScreen ? 8.0 : 16.0), // Responsive padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
