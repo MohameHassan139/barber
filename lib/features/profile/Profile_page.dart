@@ -4,7 +4,6 @@ import 'package:barber/features/favourite/favorites_page.dart';
 import 'package:barber/features/favourite/favorites_provide.dart';
 import 'package:barber/features/profile/user_details_page.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
