@@ -1,7 +1,6 @@
 import 'package:barber/features/appoinments/calendar_page.dart';
-import 'package:barber/features/services/services_page.dart';
-import 'package:flutter/material.dart';
 import 'package:barber/features/favourite/favorites_provide.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +24,7 @@ class _SalonDetailPageState extends State<SalonDetailPage>
   final GlobalKey _servicesKey = GlobalKey();
   final GlobalKey _reviewsKey = GlobalKey();
   final GlobalKey _aboutKey = GlobalKey();
-  List<Map<String, dynamic>> appointments = []; // List to store appointments
+  final GlobalKey _locationKey = GlobalKey();
 
   List<bool> selectedServices = List.filled(4, false);
   double? userRating = 0.0;
@@ -82,23 +81,17 @@ class _SalonDetailPageState extends State<SalonDetailPage>
     );
   }
 
-  void _goToAppointmentPage() async {
-    final result = await Navigator.push(
+  void _goToAppointmentPage() {
+    Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => CalendarPage(
           bookedDates: [],
           selectedServices: [],
           onAppointmentSaved: (appointmentData) {},
-        ), // Pass booked dates if any
+        ),
       ),
     );
-
-    if (result != null && result is Map<String, dynamic>) {
-      setState(() {
-        appointments.add(result); // Add the new appointment to the list
-      });
-    }
   }
 
   void _showRatingMessage() {
@@ -111,28 +104,10 @@ class _SalonDetailPageState extends State<SalonDetailPage>
     );
   }
 
-  // Widget to display appointments summary
-// Widget to display appointments summary
-  Widget _appointmentSummary() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: appointments.map((appointment) {
-        final service = appointment['service'] ?? 'Unknown Service';
-        final date = appointment['date'] != null
-            ? appointment['date'].toString()
-            : 'Unknown Date';
-
-        return ListTile(
-          title: Text(service),
-          subtitle: Text('Date: $date'),
-        );
-      }).toList(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<FavoritesProvider>(context);
+    final isAnyServiceSelected = selectedServices.any((selected) => selected);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -249,18 +224,22 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                     ],
                   ),
                   const SizedBox(height: 16),
-                  const Row(
+                  Row(
                     children: [
-                      Icon(Icons.access_time, color: Colors.green),
-                      SizedBox(width: 4),
-                      Text(
+                      const Icon(Icons.access_time, color: Colors.green),
+                      const SizedBox(width: 4),
+                      const Text(
                         'Open Now',
                         style: TextStyle(fontSize: 16, color: Colors.green),
                       ),
-                      SizedBox(width: 8),
-                      Text('9:00 AM - 7:00 PM',
+                      const SizedBox(width: 8),
+                      const Text('9:00 AM - 7:00 PM',
                           style:
                               TextStyle(fontSize: 16, color: Colors.black54)),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_downward),
+                        onPressed: () => _scrollToSection(_aboutKey),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -299,13 +278,50 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                             'Amazing service and friendly staff!', 5),
                         _reviewTile('Abdallah Abdalmonem',
                             'Great experience, highly recommended!', 4),
+                        _reviewTile('Momen Raafat',
+                            'Very professional and clean salon.', 5),
+                        _reviewTile('Islam Ragab',
+                            'Amazing service and friendly staff!', 4),
                       ],
                     ),
                   ),
                   const SizedBox(height: 24),
-                  _sectionHeader(
-                      'Your Appointments'), // New section for appointments
-                  _appointmentSummary(), // Display appointments here
+                  _sectionHeader('About'),
+                  Container(
+                    key: _aboutKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _openingHoursRow('Monday', 'Closed', Colors.grey),
+                        _openingHoursRow(
+                            'Tuesday', '9:00 AM - 7:00 PM', Colors.green),
+                        _openingHoursRow(
+                            'Wednesday', '9:00 AM - 7:00 PM', Colors.green),
+                        _openingHoursRow(
+                            'Thursday', '9:00 AM - 7:00 PM', Colors.green),
+                        _openingHoursRow(
+                            'Friday', '9:00 AM - 7:00 PM', Colors.green),
+                        _openingHoursRow(
+                            'Saturday', '9:00 AM - 7:00 PM', Colors.green),
+                        _openingHoursRow('Sunday', 'Closed', Colors.grey),
+                        const SizedBox(height: 16),
+                        const Text('Location:',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 8),
+                        ClipRRect(
+                          key: _locationKey,
+                          borderRadius: BorderRadius.circular(12.0),
+                          child: Image.asset(
+                            'assets/images/map1.jpg',
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            height: screenHeight * 0.5, // Responsive height
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -318,109 +334,84 @@ class _SalonDetailPageState extends State<SalonDetailPage>
               padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
               color: Colors.white,
               child: ElevatedButton(
-                onPressed: () {
-                  // Navigate to the ServicesPage directly
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ServicesPage(), // Navigate to ServicesPage
-                    ),
-                  );
-                },
+                onPressed: isAnyServiceSelected ? _goToAppointmentPage : null,
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
                   backgroundColor: Colors.teal,
-                  padding: EdgeInsets.symmetric(
-                    vertical: screenHeight * 0.02, // Responsive padding
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
                 ),
                 child: const Text(
-                  'Book now',
-                  style: TextStyle(fontSize: 18),
+                  'Book Now',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _sectionHeader(String title) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-        color: Colors.black87,
       ),
     );
   }
 
   Widget _sectionButton(String title, GlobalKey key) {
-    return GestureDetector(
-      onTap: () => _scrollToSection(key),
-      child: Column(
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.teal,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Container(
-            width: 60,
-            height: 2,
-            color: Colors.teal,
-          ),
-        ],
+    return ElevatedButton(
+      onPressed: () => _scrollToSection(key),
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.teal,
+      ),
+      child: Text(title),
+    );
+  }
+
+  Widget _sectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Text(
+        title,
+        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
       ),
     );
   }
 
-  Widget _serviceTile(
-      int index, String title, String description, String price) {
+  Widget _serviceTile(int index, String title, String subtitle, String price) {
     return ListTile(
       title: Text(title),
-      subtitle: Text(description),
+      subtitle: Text(subtitle),
       trailing: Text(price),
+      leading: Checkbox(
+        value: selectedServices[index],
+        onChanged: (bool? value) {
+          setState(() {
+            selectedServices[index] = value!;
+          });
+        },
+      ),
     );
   }
 
-  Widget _reviewTile(String name, String review, double rating) {
+  Widget _reviewTile(String reviewer, String review, double rating) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.teal,
-        child: Text(
-          name.substring(0, 1),
-          style: const TextStyle(color: Colors.white),
+      title: Text(reviewer),
+      subtitle: Text(review),
+      trailing: RatingBarIndicator(
+        rating: rating,
+        itemCount: 5,
+        itemSize: 20.0,
+        unratedColor: Colors.grey[300],
+        itemBuilder: (context, _) => const Icon(
+          Icons.star,
+          color: Colors.amber,
         ),
       ),
-      title: Text(name),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(review),
-          const SizedBox(height: 4),
-          Row(
-            children: List.generate(
-              rating.toInt(),
-              (index) => const Icon(
-                Icons.star,
-                size: 16,
-                color: Colors.amber,
-              ),
-            ),
-          ),
-        ],
-      ),
+    );
+  }
+
+  Widget _openingHoursRow(String day, String hours, Color color) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(day, style: const TextStyle(fontSize: 16)),
+        Text(hours, style: TextStyle(fontSize: 16, color: color)),
+      ],
     );
   }
 }
