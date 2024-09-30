@@ -3,8 +3,11 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 
+import '../../../../core/function/push_screen.dart';
 import '../../../../core/utils/cashe_helper.dart';
+import '../../../home/HomePage.dart';
 import '../../models/user_model.dart';
 import 'login_cubit_state.dart';
 
@@ -16,7 +19,7 @@ class LoginCubit extends Cubit<LoginState> {
   bool isPasswordVisible = true;
   IconData passwordIcon = Icons.remove_red_eye_outlined;
 
-  Future<void> login({required String email, required String password}) async {
+  Future<void> login({required String email, required String password,required BuildContext context }) async {
     emit(LoginLoading());
 
     try {
@@ -24,19 +27,18 @@ class LoginCubit extends Cubit<LoginState> {
           .signInWithEmailAndPassword(email: email, password: password);
 
       if (!userCredential.user!.emailVerified) {
-      
         emit(LoginEmailNotVerified());
       } else {
-       
-        
         CacheHelper.setEmail(email);
         documentExists(email).then((value) {
           if (value) {
             // barber ui
             // TODO
           } else {
-            // user ui
-            // TODO
+            pushAndRemoveUntil(
+              context: context,
+              screen: HomePage(),
+            );
           }
         });
 
@@ -67,7 +69,6 @@ class LoginCubit extends Cubit<LoginState> {
         : Icons.visibility_off_outlined;
     emit(LoginPasswordVisibilityChanged());
   }
-
 
   void sendEmailVerification() {
     FirebaseAuth.instance.currentUser?.sendEmailVerification();
