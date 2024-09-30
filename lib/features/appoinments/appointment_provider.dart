@@ -1,14 +1,13 @@
-// providers/appointment_provider.dart
-import 'package:barber/models/appointment_model.dart';
 import 'package:flutter/material.dart';
+import 'package:barber/models/appointment_model.dart';
 
 class AppointmentProvider with ChangeNotifier {
-  AppointmentModel? _appointment;
+  List<AppointmentModel> _appointments = [];
 
-  AppointmentModel? get appointment => _appointment;
+  List<AppointmentModel> get appointments => _appointments;
 
-  void saveAppointment(AppointmentModel appointment) {
-    _appointment = appointment;
-    notifyListeners();
+  void addAppointment(AppointmentModel appointment) {
+    _appointments.add(appointment);
+    notifyListeners(); // Notify listeners to rebuild UI when appointments are added
   }
 }

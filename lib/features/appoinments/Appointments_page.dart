@@ -1,35 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:barber/models/appointment_model.dart';
 
-class AppointmentPage extends StatelessWidget {
-  final List<Map<String, dynamic>> appointments;
+class AppointmentProvider with ChangeNotifier {
+  List<AppointmentModel> _appointments = [];
 
-  const AppointmentPage({super.key, required this.appointments});
+  List<AppointmentModel> get appointments => _appointments;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Appointments"),
-        backgroundColor: Colors.blueGrey[900],
-      ),
-      body: appointments.isEmpty
-          ? const Center(child: Text("No appointments booked yet."))
-          : ListView.builder(
-              itemCount: appointments.length,
-              itemBuilder: (context, index) {
-                DateTime date = appointments[index]['date'];
-                TimeOfDay time = appointments[index]['time'];
-                return ListTile(
-                  leading: const Icon(Icons.calendar_today),
-                  title: Text(
-                    "Date: ${date.day}/${date.month}/${date.year}",
-                  ),
-                  subtitle: Text(
-                    "Time: ${time.format(context)}",
-                  ),
-                );
-              },
-            ),
-    );
+  void addAppointment(AppointmentModel appointment) {
+    _appointments.add(appointment);
+    notifyListeners();
   }
 }

@@ -133,7 +133,6 @@ class _SalonDetailPageState extends State<SalonDetailPage>
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<FavoritesProvider>(context);
-    final isAnyServiceSelected = selectedServices.any((selected) => selected);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
