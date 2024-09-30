@@ -9,11 +9,7 @@ class CustomBottom extends StatelessWidget {
   String text;
 
   bool? isloading = true;
-  CustomBottom(
-      {this.onTap,
-      required this.text,
-    
-      this.isloading});
+  CustomBottom({this.onTap, required this.text, this.isloading});
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -23,34 +19,34 @@ class CustomBottom extends StatelessWidget {
         child: CircularProgressIndicator(),
       ),
       child: GestureDetector(
-      onTap: onTap,
-      child: CustomOutline(
-        strokeWidth: 3,
-        radius: 20,
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            CustomColors.kPinkColor,
-            CustomColors.kGreenColor,
-          ],
-        ),
+        onTap: onTap,
+        child: CustomOutline(
+          strokeWidth: 3,
+          radius: 20,
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              CustomColors.kPinkColor,
+              CustomColors.kGreenColor,
+            ],
+          ),
           width: 160,
           height: 38,
           padding: const EdgeInsets.all(3),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                CustomColors.kPinkColor.withOpacity(0.5),
-                CustomColors.kGreenColor.withOpacity(0.5),
-              ],
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  CustomColors.kPinkColor.withOpacity(0.5),
+                  CustomColors.kGreenColor.withOpacity(0.5),
+                ],
+              ),
             ),
-          ),
-          child: Center(
+            child: Center(
               child: Text(
                 '$text',
                 textAlign: TextAlign.center,
@@ -60,7 +56,6 @@ class CustomBottom extends StatelessWidget {
                   color: CustomColors.kWhiteColor,
                 ),
               ),
-            
             ),
           ),
         ),
