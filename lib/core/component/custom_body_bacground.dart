@@ -8,7 +8,7 @@ class CustomBody extends StatelessWidget {
   final double? bodyHeight;
   final double? bodyWidth;
   Widget child;
-  CustomBody({this.bodyHeight, this.bodyWidth, required this.child});
+  CustomBody({super.key, this.bodyHeight, this.bodyWidth, required this.child});
   @override
   Widget build(BuildContext context) {
     final screenHight = MediaQuery.of(context).size.height;
@@ -24,7 +24,7 @@ class CustomBody extends StatelessWidget {
             child: Container(
               height: 200,
               width: 200,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: CustomColors.kPinkColor,
               ),

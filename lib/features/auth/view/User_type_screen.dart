@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'login_screen.dart';
 import 'register_barber_screen.dart';
 import 'register_uesr_screen.dart';
 
@@ -27,7 +26,7 @@ class UserTypeScreen extends StatelessWidget {
             ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return RegistrationBarberScreen();
+                    return const RegistrationBarberScreen();
                   }));
                 },
                 child: const Text('  Sigin as barber  ')),

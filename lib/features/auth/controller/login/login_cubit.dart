@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/utils/cashe_helper.dart';
-import '../../models/user_model.dart';
 import 'login_cubit_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
@@ -24,11 +23,8 @@ class LoginCubit extends Cubit<LoginState> {
           .signInWithEmailAndPassword(email: email, password: password);
 
       if (!userCredential.user!.emailVerified) {
-      
         emit(LoginEmailNotVerified());
       } else {
-       
-        
         CacheHelper.setEmail(email);
         documentExists(email).then((value) {
           if (value) {
@@ -67,7 +63,6 @@ class LoginCubit extends Cubit<LoginState> {
         : Icons.visibility_off_outlined;
     emit(LoginPasswordVisibilityChanged());
   }
-
 
   void sendEmailVerification() {
     FirebaseAuth.instance.currentUser?.sendEmailVerification();
