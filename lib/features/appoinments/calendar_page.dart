@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:provider/provider.dart';
+import 'package:barber/features/appoinments/appointment_provider.dart';
+import 'package:barber/models/appointment_model.dart';
+import 'package:barber/features/appoinments/appointment_summery_page.dart';
 
 class CalendarPage extends StatefulWidget {
   final DateTime? initialDate;
   final TimeOfDay? initialTime;
   final List bookedDates;
+  final List<Map<String, dynamic>> selectedServices;
 
   const CalendarPage({
-    super.key,
+    Key? key,
     this.initialDate,
     this.initialTime,
     required this.bookedDates,
-  });
+    required this.selectedServices,
+    required Null Function(dynamic appointmentData) onAppointmentSaved,
+  }) : super(key: key);
 
   @override
   _CalendarPageState createState() => _CalendarPageState();
@@ -32,6 +39,8 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final appointmentProvider =
+        Provider.of<AppointmentProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -40,57 +49,58 @@ class _CalendarPageState extends State<CalendarPage> {
         elevation: 10,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(screenWidth * 0.03), // Responsive padding
+        padding: EdgeInsets.all(screenWidth * 0.03),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              decoration: BoxDecoration(
-                color: Colors.blueGrey[50],
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 4),
-                    blurRadius: 8,
-                  ),
-                ],
-              ),
-              margin: const EdgeInsets.symmetric(vertical: 8.0),
-              padding: const EdgeInsets.all(8.0),
-              child: TableCalendar(
-                firstDay: DateTime.utc(2020, 1, 1),
-                lastDay: DateTime.utc(2030, 12, 31),
-                focusedDay: _focusedDay,
-                selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
-                onDaySelected: (selectedDay, focusedDay) {
-                  setState(() {
-                    _selectedDate = selectedDay;
-                    _focusedDay = focusedDay;
-                  });
-                },
-                calendarFormat: CalendarFormat.month,
-                headerStyle: const HeaderStyle(
-                  formatButtonVisible: false,
-                  titleCentered: true,
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey[50],
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0, 4),
+                      blurRadius: 8,
+                    ),
+                  ],
                 ),
-                calendarStyle: const CalendarStyle(
-                  selectedDecoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    shape: BoxShape.circle,
+                margin: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.all(8.0),
+                child: TableCalendar<dynamic>(
+                  firstDay: DateTime.utc(2020, 1, 1),
+                  lastDay: DateTime.utc(2030, 12, 31),
+                  focusedDay: _focusedDay,
+                  selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
+                  onDaySelected: (selectedDay, focusedDay) {
+                    if (!isSameDay(_selectedDate, selectedDay)) {
+                      setState(() {
+                        _selectedDate = selectedDay;
+                        _focusedDay = focusedDay;
+                      });
+                    }
+                  },
+                  calendarFormat: CalendarFormat.month,
+                  headerStyle: const HeaderStyle(
+                    formatButtonVisible: false,
+                    titleCentered: true,
                   ),
-                  todayDecoration: BoxDecoration(
-                    color: Colors.orangeAccent,
-                    shape: BoxShape.circle,
+                  calendarStyle: const CalendarStyle(
+                    selectedDecoration: BoxDecoration(
+                      color: Colors.blueAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    todayDecoration: BoxDecoration(
+                      color: Colors.orangeAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    markerDecoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    outsideDaysVisible: false,
                   ),
-                  markerDecoration: BoxDecoration(
-                    color: Colors.redAccent,
-                    shape: BoxShape.circle,
-                  ),
-                  outsideDaysVisible: false,
-                ),
-              ),
-            ),
+                )),
             const SizedBox(height: 10),
             ListTile(
               leading: const Icon(Icons.access_time, color: Colors.blueGrey),
@@ -99,7 +109,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     ? "Select Time"
                     : _selectedTime!.format(context),
                 style: TextStyle(
-                  fontSize: screenWidth * 0.045, // Responsive font size
+                  fontSize: screenWidth * 0.045,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -118,10 +128,27 @@ class _CalendarPageState extends State<CalendarPage> {
               child: ElevatedButton(
                 onPressed: _selectedDate != null && _selectedTime != null
                     ? () {
-                        Navigator.pop(context, {
-                          "date": _selectedDate!,
-                          "time": _selectedTime!,
-                        });
+                        final newAppointment = AppointmentModel(
+                          date: _selectedDate!,
+                          time: _selectedTime!,
+                          selectedServices: widget.selectedServices,
+                        );
+
+                        appointmentProvider.addAppointment(newAppointment);
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AppointmentSummaryPage(
+                              appointments: [
+                                {
+                                  "date": _selectedDate!,
+                                  "time": _selectedTime!,
+                                },
+                              ],
+                            ),
+                          ),
+                        );
                       }
                     : null,
                 style: ElevatedButton.styleFrom(
@@ -159,7 +186,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Future<void> _pickTime() async {
     TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialTime: _selectedTime!,
+      initialTime: _selectedTime ?? TimeOfDay.now(),
     );
     if (pickedTime != null) {
       setState(() {
