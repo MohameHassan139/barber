@@ -86,8 +86,8 @@ class _SalonDetailPageState extends State<SalonDetailPage>
       context,
       MaterialPageRoute(
         builder: (context) => CalendarPage(
-          bookedDates: [],
-          selectedServices: [],
+          bookedDates: const [],
+          selectedServices: const [],
           onAppointmentSaved: (appointmentData) {},
         ),
       ),
