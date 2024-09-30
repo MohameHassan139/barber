@@ -12,13 +12,13 @@ class CalendarPage extends StatefulWidget {
   final List<Map<String, dynamic>> selectedServices;
 
   const CalendarPage({
-    Key? key,
+    super.key,
     this.initialDate,
     this.initialTime,
     required this.bookedDates,
     required this.selectedServices,
     required Null Function(dynamic appointmentData) onAppointmentSaved,
-  }) : super(key: key);
+  });
 
   @override
   _CalendarPageState createState() => _CalendarPageState();

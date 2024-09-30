@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:barber/models/appointment_model.dart';
 
 class AppointmentProvider with ChangeNotifier {
-  List<AppointmentModel> _appointments = [];
+  final List<AppointmentModel> _appointments = [];
 
   List<AppointmentModel> get appointments => _appointments;
 
