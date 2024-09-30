@@ -1,3 +1,4 @@
+import 'package:barber/features/appoinments/appointment_provider.dart';
 import 'package:barber/features/favourite/favorites_provide.dart';
 import 'package:barber/features/home/HomePage.dart';
 import 'package:flutter/material.dart';
@@ -5,8 +6,13 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => FavoritesProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => FavoritesProvider()),
+        ChangeNotifierProvider(
+            create: (_) =>
+                AppointmentProvider()), // Add the AppointmentProvider
+      ],
       child: const BarberApp(),
     ),
   );

@@ -1,3 +1,6 @@
+// calendar_page.dart
+
+import 'package:barber/features/appoinments/appointment_summery_page.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -5,12 +8,15 @@ class CalendarPage extends StatefulWidget {
   final DateTime? initialDate;
   final TimeOfDay? initialTime;
   final List bookedDates;
+  final Function(Map<String, dynamic>) onAppointmentSaved; // New parameter
 
   const CalendarPage({
     super.key,
     this.initialDate,
     this.initialTime,
     required this.bookedDates,
+    required List<Map<String, dynamic>> selectedServices,
+    required this.onAppointmentSaved, // Pass the callback
   });
 
   @override
@@ -40,7 +46,7 @@ class _CalendarPageState extends State<CalendarPage> {
         elevation: 10,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(screenWidth * 0.03), // Responsive padding
+        padding: EdgeInsets.all(screenWidth * 0.03),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -99,7 +105,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     ? "Select Time"
                     : _selectedTime!.format(context),
                 style: TextStyle(
-                  fontSize: screenWidth * 0.045, // Responsive font size
+                  fontSize: screenWidth * 0.045,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -118,10 +124,25 @@ class _CalendarPageState extends State<CalendarPage> {
               child: ElevatedButton(
                 onPressed: _selectedDate != null && _selectedTime != null
                     ? () {
-                        Navigator.pop(context, {
+                        // Save the appointment and navigate to AppointmentSummaryPage
+                        final appointment = {
                           "date": _selectedDate!,
                           "time": _selectedTime!,
-                        });
+                        };
+
+                        // Call the callback function to save the appointment
+                        widget.onAppointmentSaved(appointment);
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AppointmentSummaryPage(
+                              appointments: [
+                                appointment,
+                              ],
+                            ),
+                          ),
+                        );
                       }
                     : null,
                 style: ElevatedButton.styleFrom(

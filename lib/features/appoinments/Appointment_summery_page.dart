@@ -30,8 +30,10 @@ class AppointmentSummaryPage extends StatelessWidget {
               itemCount: appointments.length,
               padding: EdgeInsets.all(screenWidth * 0.03), // Responsive padding
               itemBuilder: (context, index) {
-                DateTime date = appointments[index]['date'];
-                TimeOfDay time = appointments[index]['time'];
+                DateTime date =
+                    appointments[index]['date']; // Keep DateTime type
+                TimeOfDay time =
+                    appointments[index]['time']; // Keep TimeOfDay type
 
                 return Card(
                   shape: RoundedRectangleBorder(
@@ -67,16 +69,11 @@ class AppointmentSummaryPage extends StatelessWidget {
                         ),
                       ),
                       subtitle: Text(
-                        "Time: ${time.format(context)}",
+                        "Time: ${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}",
                         style: TextStyle(
-                          fontSize: screenWidth * 0.04, // Responsive font size
+                          fontSize: screenWidth * 0.045,
                           color: Colors.white70,
                         ),
-                      ),
-                      trailing: const Icon(
-                        Icons.access_time,
-                        color: Colors.white,
-                        size: 28,
                       ),
                     ),
                   ),
