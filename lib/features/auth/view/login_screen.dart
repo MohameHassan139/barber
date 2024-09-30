@@ -87,6 +87,7 @@ class LoginScreen extends StatelessWidget {
                                       cubit.login(
                                         email: cubit.emailController.text,
                                         password: cubit.passwordController.text,
+                                        context: context,
                                       );
                                     }
                                   },

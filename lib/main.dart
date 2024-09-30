@@ -9,6 +9,7 @@ import 'features/add_service/view/add_service_screen.dart';
 import 'features/add_service/view/view_service_screen.dart';
 import 'features/auth/view/User_type_screen.dart';
 import 'features/auth/view/login_screen.dart';
+import 'features/location/location_screan.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const UserTypeScreen(),
+        home: const live_location(),
       ),
     );
   }
