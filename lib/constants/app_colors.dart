@@ -10,8 +10,8 @@ class CustomColors {
   static const Color kWhiteColor = Color(0xFFFFFFFF);
   static const Color kGreyColor = Color.fromARGB(255, 166, 166, 175);
   static final Color? kGreyBackground = Colors.grey[200];
-  static const Color KprimaryColor = Color(0xff100B20);
-  static  Color KshimmerHighlightColor = Colors.grey[600]!;
-  static const Color KshimmerBaseColor = Color.fromARGB(142, 116, 115, 115);
-  static const Color KwhiteColor = Colors.white;
+  static const Color kprimaryColor = Color(0xff100B20);
+  static Color kshimmerHighlightColor = Colors.grey[600]!;
+  static const Color kshimmerBaseColor = Color.fromARGB(142, 116, 115, 115);
+  static const Color kwhiteColor = Colors.white;
 }

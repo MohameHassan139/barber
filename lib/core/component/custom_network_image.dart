@@ -1,11 +1,8 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../constants/app_colors.dart';
-
 
 class CustomNetworkImage extends StatelessWidget {
   const CustomNetworkImage({
@@ -28,8 +25,8 @@ class CustomNetworkImage extends StatelessWidget {
         fit: BoxFit.cover,
         imageUrl: imageUrl,
         placeholder: (context, url) => Shimmer.fromColors(
-          baseColor: CustomColors.KshimmerBaseColor,
-          highlightColor: CustomColors.KshimmerHighlightColor,
+          baseColor: CustomColors.kshimmerBaseColor,
+          highlightColor: CustomColors.kshimmerHighlightColor,
           child: Container(
             color: Colors.grey,
           ),
