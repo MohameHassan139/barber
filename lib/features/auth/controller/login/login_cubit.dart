@@ -19,14 +19,17 @@ class LoginCubit extends Cubit<LoginState> {
   bool isPasswordVisible = true;
   IconData passwordIcon = Icons.remove_red_eye_outlined;
 
-  Future<void> login({required String email, required String password,required BuildContext context }) async {
+  Future<void> login(
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
     emit(LoginLoading());
 
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
-      if (!userCredential.user!.emailVerified) {
+      if (userCredential.user!.emailVerified) {
         emit(LoginEmailNotVerified());
       } else {
         CacheHelper.setEmail(email);
