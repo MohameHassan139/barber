@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-
 import '../../constants/app_colors.dart';
-import '../../constants/constants.dart';
 import 'custom_outline.dart';
-
 class CustomBottom extends StatelessWidget {
   VoidCallback? onTap;
   String text;
 
   bool? isloading = true;
-  CustomBottom({this.onTap, required this.text, this.isloading});
+  CustomBottom({super.key, this.onTap, required this.text, this.isloading});
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -48,7 +45,7 @@ class CustomBottom extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                '$text',
+                text,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: height <= 660 ? 11 : 15,

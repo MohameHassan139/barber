@@ -3,12 +3,10 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/widgets.dart';
 
 import '../../../../core/function/push_screen.dart';
 import '../../../../core/utils/cashe_helper.dart';
 import '../../../home/HomePage.dart';
-import '../../models/user_model.dart';
 import 'login_cubit_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
@@ -40,7 +38,7 @@ class LoginCubit extends Cubit<LoginState> {
           } else {
             pushAndRemoveUntil(
               context: context,
-              screen: HomePage(),
+              screen: const HomePage(),
             );
           }
         });

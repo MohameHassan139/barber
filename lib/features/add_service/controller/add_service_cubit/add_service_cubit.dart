@@ -4,7 +4,6 @@ import 'package:barber/features/add_service/firebase_sevice_helper.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:meta/meta.dart';
 
 part 'add_service_state.dart';
 

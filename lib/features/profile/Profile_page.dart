@@ -1,7 +1,6 @@
 import 'package:barber/features/appoinments/Appointment_summery_page.dart';
 import 'package:barber/features/data_performance/data_performance_page.dart';
 import 'package:barber/features/favourite/favorites_page.dart';
-import 'package:barber/features/favourite/favorites_provide.dart';
 import 'package:barber/features/profile/user_details_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +10,7 @@ import 'package:provider/provider.dart';
 class ProfilePage extends StatefulWidget {
   final List<Map<String, dynamic>> appointments;
 
-  ProfilePage({super.key, required this.appointments});
+  const ProfilePage({super.key, required this.appointments});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -212,7 +211,7 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => FavoritesPage(favoriteShops: [{}]),
+        builder: (context) => const FavoritesPage(favoriteShops: [{}]),
       ),
     );
   }

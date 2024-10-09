@@ -1,10 +1,8 @@
 import 'package:barber/constants/app_colors.dart';
 import 'package:barber/core/component/custom_botton.dart';
-import 'package:barber/features/add_service/firebase_sevice_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_validator/form_validator.dart';
-
 import '../../../core/component/custom_textformfield.dart';
 import '../controller/add_service_cubit/add_service_cubit.dart';
 
@@ -21,7 +19,7 @@ class AddServiceScreen extends StatelessWidget {
         child: BlocBuilder<AddServiceCubit, AddServiceState>(
           builder: (context, state) {
             var cubit = context.read<AddServiceCubit>();
-    
+
             return Form(
               key: formKey,
               child: Padding(

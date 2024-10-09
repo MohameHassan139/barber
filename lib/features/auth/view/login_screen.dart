@@ -1,18 +1,15 @@
-import 'dart:math';
-
 import 'package:barber/features/auth/view/register_uesr_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_validator/form_validator.dart';
 
-import '../../../constants/app_colors.dart';
 import '../../../core/component/custom_botton.dart';
 import '../../../core/component/custom_textformfield.dart';
 import '../controller/login/login_cubit.dart';
 import '../controller/login/login_cubit_state.dart';
 
 class LoginScreen extends StatelessWidget {
-  LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({super.key});
 
   var formKey = GlobalKey<FormState>();
 
@@ -21,20 +18,15 @@ class LoginScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => LoginCubit(),
       child: Scaffold(
-       
         body: Form(
           key: formKey,
           child: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 263, 10, 263),
-
-              
               child: Column(
-                
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                
                 children: [
                   Container(
                     margin: const EdgeInsets.fromLTRB(0, 0, 1, 41),
@@ -92,13 +84,12 @@ class LoginScreen extends StatelessWidget {
                                     }
                                   },
                                 ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           if (state is LoginEmailNotVerified)
                             Container(
-                              color: Color.fromARGB(255, 0, 26, 255),
-
+                              color: const Color.fromARGB(255, 0, 26, 255),
                               height: 50,
                               width: double.infinity,
                               child: Padding(
@@ -121,10 +112,9 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                         
                           if (state is LoginError)
                             Text(
-                              (state as LoginError).error,
+                              (state).error,
                               style: const TextStyle(color: Colors.red),
                             ),
                           const SizedBox(height: 100),
@@ -139,7 +129,8 @@ class LoginScreen extends StatelessWidget {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => RegisterScreen(),
+                                        builder: (context) =>
+                                            const RegisterScreen(),
                                       ));
                                 },
                                 child: const Text('Register',

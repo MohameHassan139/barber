@@ -9,7 +9,7 @@ class CustomOutline extends StatelessWidget {
   final EdgeInsetsGeometry _padding;
 
   CustomOutline({
-    Key? key,
+    super.key,
     required double strokeWidth,
     required double radius,
     required Gradient gradient,
@@ -22,8 +22,7 @@ class CustomOutline extends StatelessWidget {
         _child = child,
         _width = width,
         _height = height,
-        _padding = padding,
-        super(key: key);
+        _padding = padding;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +31,8 @@ class CustomOutline extends StatelessWidget {
       child: Container(
         width: _width,
         height: _height,
-        child: _child,
         padding: _padding,
+        child: _child,
       ),
     );
   }

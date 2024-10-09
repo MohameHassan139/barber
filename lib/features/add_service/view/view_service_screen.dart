@@ -4,7 +4,6 @@ import 'package:barber/features/add_service/view/widget/service_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../constants/app_colors.dart';
 import '../../../core/component/error_widget.dart';
 
 class ViewServiceScreen extends StatelessWidget {

@@ -9,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/utils/cashe_helper.dart';
-import '../../view/User_type_screen.dart';
 import '../../view/login_screen.dart';
 import 'register_barner_state.dart';
 

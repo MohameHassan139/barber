@@ -1,10 +1,8 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:barber/core/utils/cashe_helper.dart';
 import 'package:barber/features/add_service/model/sevice_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 
@@ -24,13 +22,14 @@ class FirebaseSeviceHelper {
         var uploadTask = await storage
             .ref()
             .child(
-                'services/$email/$rand${Uri.file(serviceImage!.path).pathSegments.last}')
-            .putFile(serviceImage!);
+                'services/$email/$rand${Uri.file(serviceImage.path).pathSegments.last}')
+            .putFile(serviceImage);
         var imageUrl = await uploadTask.ref.getDownloadURL();
 
         return imageUrl;
-      } on firebase_core.FirebaseException catch (e) {}
+      } on firebase_core.FirebaseException {}
     }
+    return null;
   }
 
   Future<void> uploadServiceData({

@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -12,7 +11,7 @@ import '../controller/register_barber_cubit/register_barner_state.dart';
 import 'login_screen.dart';
 
 class RegistrationBarberScreen extends StatelessWidget {
-  const RegistrationBarberScreen({Key? key}) : super(key: key);
+  const RegistrationBarberScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -251,7 +250,6 @@ class RegistrationBarberScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      
                     ],
                   ),
                 ),
