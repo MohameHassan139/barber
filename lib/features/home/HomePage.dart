@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _pages = [
       const SearchBarberPage(),
-      AppointmentSummaryPage(appointments: _appointments),
+      AppointmentSummaryPage(),
       ProfilePage(appointments: _appointments),
     ];
   }

@@ -106,7 +106,7 @@ class _SalonDetailPageState extends State<SalonDetailPage>
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<FavoritesProvider>(context);
+    // final provider = Provider.of<FavoritesProvider>(context);
     final isAnyServiceSelected = selectedServices.any((selected) => selected);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -126,23 +126,23 @@ class _SalonDetailPageState extends State<SalonDetailPage>
           },
         ),
         actions: [
-          IconButton(
-            icon: Icon(
-              provider.isFavorite({
-                'title': widget.title,
-                'subtitle': widget.subtitle,
-              })
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-              color: provider.isFavorite({
-                'title': widget.title,
-                'subtitle': widget.subtitle,
-              })
-                  ? Colors.red
-                  : Colors.grey,
-            ),
-            onPressed: _toggleFavorite,
-          ),
+          // IconButton(
+          //   icon: Icon(
+          //     provider.isFavorite({
+          //       'title': widget.title,
+          //       'subtitle': widget.subtitle,
+          //     })
+          //         ? Icons.favorite
+          //         : Icons.favorite_border,
+          //     color: provider.isFavorite({
+          //       'title': widget.title,
+          //       'subtitle': widget.subtitle,
+          //     })
+          //         ? Colors.red
+          //         : Colors.grey,
+          //   ),
+          //   onPressed: _toggleFavorite,
+          // ),
         ],
       ),
       body: Stack(

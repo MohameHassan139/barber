@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
@@ -40,8 +42,8 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final appointmentProvider =
-        Provider.of<AppointmentProvider>(context, listen: false);
+    // final appointmentProvider =
+    //     Provider.of<AppointmentProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -128,29 +130,7 @@ class _CalendarPageState extends State<CalendarPage> {
               margin: const EdgeInsets.symmetric(vertical: 2.0),
               child: ElevatedButton(
                 onPressed: _selectedDate != null && _selectedTime != null
-                    ? () {
-                        final newAppointment = AppointmentModel(
-                          date: _selectedDate!,
-                          time: _selectedTime!,
-                          selectedServices: widget.selectedServices,
-                        );
-
-                        appointmentProvider.addAppointment(newAppointment);
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AppointmentSummaryPage(
-                              appointments: [
-                                {
-                                  "date": _selectedDate!,
-                                  "time": _selectedTime!,
-                                },
-                              ],
-                            ),
-                          ),
-                        );
-                      }
+                    ? () => _addAppointment()
                     : null,
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
@@ -182,6 +162,52 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
       ),
     );
+  }
+
+  void _addAppointment() async {
+    try {
+      // Create a reference to the Firestore collection
+      CollectionReference appointments =
+          FirebaseFirestore.instance.collection('appointments');
+
+      // Convert TimeOfDay to a string format (e.g., "HH:mm")
+      String appointmentTime = _selectedTime!.format(context);
+
+      // Create a new appointment document
+      await appointments.add({
+        'userId': FirebaseAuth.instance.currentUser?.uid,
+        'services': widget
+            .selectedServices, // Assuming this is a List<Map<String, dynamic>>
+        'appointmentDate': _selectedDate,
+        'appointmentTime': appointmentTime, // Store as string
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Appointment booked successfully!'),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AppointmentSummaryPage(),
+        ),
+      );
+    } catch (e) {
+      // Handle errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to book appointment: $e'),
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Future<void> _pickTime() async {
