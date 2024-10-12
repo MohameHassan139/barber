@@ -125,7 +125,7 @@ class _SalonDetailPageState extends State<SalonDetailPage>
             Navigator.of(context).pop();
           },
         ),
-        actions: [
+        actions: const [
           // IconButton(
           //   icon: Icon(
           //     provider.isFavorite({

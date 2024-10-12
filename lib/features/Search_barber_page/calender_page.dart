@@ -6,11 +6,11 @@ class CalendarPage extends StatelessWidget {
   final Function(DateTime) onAppointmentSaved;
 
   const CalendarPage({
-    Key? key,
+    super.key,
     required this.bookedDates,
     required this.selectedServices,
     required this.onAppointmentSaved,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
