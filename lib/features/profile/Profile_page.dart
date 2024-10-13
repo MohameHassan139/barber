@@ -1,4 +1,4 @@
-import 'package:barber/features/appoinments/Appointment_summery_page.dart';
+import 'package:barber/features/barber/presentation/views/barber_dashboard.dart';
 import 'package:barber/features/data_performance/data_performance_page.dart';
 import 'package:barber/features/favourite/favorites_page.dart';
 import 'package:barber/features/favourite/favorites_provide.dart';
@@ -90,11 +90,17 @@ class ProfilePage extends StatelessWidget {
                             "Favorites",
                             () => _navigateToFavorites(context),
                           ),
+                          // _buildStylishListTile(
+                          //   context,
+                          //   Icons.calendar_today,
+                          //   "Your Appointments",
+                          //   () => _navigateToAppointments(context),
+                          // ),
                           _buildStylishListTile(
                             context,
-                            Icons.calendar_today,
-                            "Your Appointments",
-                            () => _navigateToAppointments(context),
+                            Icons.dashboard, // Use a dashboard icon
+                            "Dashboard", // New Dashboard option
+                            () => _navigateToDashboard(context),
                           ),
                           _buildStylishListTile(
                             context,
@@ -183,16 +189,23 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  void _navigateToAppointments(BuildContext context) {
-    if (appointments.isNotEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              AppointmentSummaryPage(appointments: appointments),
-        ),
-      );
-    }
+  // void _navigateToAppointments(BuildContext context) {
+  //   if (appointments.isNotEmpty) {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) =>
+  //             AppointmentSummaryPage(appointments: appointments),
+  //       ),
+  //     );
+  //   }
+  // }
+
+  void _navigateToDashboard(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BarberDashboard()),
+    );
   }
 
   void _navigateToSettings(BuildContext context) {
@@ -217,24 +230,13 @@ class ProfilePage extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          // TextButton(
-          //   onPressed: () {
-          // Optionally, implement any action on button press
-          // Navigator.of(context).pop(); // Close the snackbar
-          //   },
-          //   child: const Text(
-          //     'UNDO',
-          //     style: TextStyle(
-          //         color: Colors.yellowAccent), // Customize button color
-          //   ),
-          // ),
         ],
       ),
-      backgroundColor: Colors.blueGrey[900], // Modern background color
+      backgroundColor: Colors.blueGrey[900],
       duration: const Duration(seconds: 1),
-      behavior: SnackBarBehavior.floating, // Floating snackbar
+      behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15), // Rounded corners
+        borderRadius: BorderRadius.circular(15),
       ),
     );
 
@@ -244,14 +246,12 @@ class ProfilePage extends StatelessWidget {
   void _showProfilePictureOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor:
-          Colors.transparent, // Makes background transparent for card effect
+      backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
         return Card(
-          elevation: 8, // Increased elevation for a more prominent shadow
+          elevation: 8,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-                top: Radius.circular(20)), // Rounded top corners
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Container(
             padding: const EdgeInsets.all(20),
@@ -263,7 +263,7 @@ class ProfilePage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey, // Matching with the theme
+                    color: Colors.blueGrey,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -279,7 +279,7 @@ class ProfilePage extends StatelessWidget {
                     // Handle the selected image from camera here
                   },
                 ),
-                const Divider(height: 2), // Divider for better separation
+                const Divider(height: 2),
                 ListTile(
                   leading:
                       const Icon(Icons.photo, color: Colors.blueGrey, size: 30),
