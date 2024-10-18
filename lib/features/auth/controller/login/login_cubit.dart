@@ -3,10 +3,12 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../../../core/function/push_screen.dart';
 import '../../../../core/utils/cashe_helper.dart';
 import '../../../home/HomePage.dart';
+import '../../models/user_model.dart';
 import 'login_cubit_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
@@ -17,17 +19,14 @@ class LoginCubit extends Cubit<LoginState> {
   bool isPasswordVisible = true;
   IconData passwordIcon = Icons.remove_red_eye_outlined;
 
-  Future<void> login(
-      {required String email,
-      required String password,
-      required BuildContext context}) async {
+  Future<void> login({required String email, required String password,required BuildContext context }) async {
     emit(LoginLoading());
 
-    try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password);
 
-      if (userCredential.user!.emailVerified) {
+      if (!userCredential.user!.emailVerified) {
         emit(LoginEmailNotVerified());
       } else {
         CacheHelper.setEmail(email);
@@ -38,30 +37,30 @@ class LoginCubit extends Cubit<LoginState> {
           } else {
             pushAndRemoveUntil(
               context: context,
-              screen: const HomePage(),
+              screen: HomePage(),
             );
           }
         });
 
-        emit(LoginSuccess());
+          emit(LoginSuccess());
+        }
+      } catch (e) {
+        emit(LoginError(e.toString()));
       }
-    } catch (e) {
-      emit(LoginError(e.toString()));
     }
-  }
 
-  Future<bool> documentExists(String documentId) async {
-    try {
-      final DocumentSnapshot doc = await FirebaseFirestore.instance
-          .collection('barber_services')
-          .doc(documentId)
-          .get();
-      return doc.exists;
-    } catch (e) {
-      print('Error checking document existence: $e');
-      return false;
+    Future<bool> documentExists(String documentId) async {
+      try {
+        final DocumentSnapshot doc = await FirebaseFirestore.instance
+            .collection('barber_services')
+            .doc(documentId)
+            .get();
+        return doc.exists;
+      } catch (e) {
+        print('Error checking document existence: $e');
+        return false;
+      }
     }
-  }
 
   void togglePasswordVisibility() {
     isPasswordVisible = !isPasswordVisible;
@@ -71,8 +70,9 @@ class LoginCubit extends Cubit<LoginState> {
     emit(LoginPasswordVisibilityChanged());
   }
 
-  void sendEmailVerification() {
-    FirebaseAuth.instance.currentUser?.sendEmailVerification();
-    emit(EmailVerificationSent());
+    void sendEmailVerification() {
+      FirebaseAuth.instance.currentUser?.sendEmailVerification();
+      emit(EmailVerificationSent());
+    }
   }
 }

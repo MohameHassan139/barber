@@ -6,6 +6,8 @@ import 'core/utils/cashe_helper.dart';
 import 'features/add_service/controller/add_service_cubit/add_service_cubit.dart';
 import 'features/add_service/firebase_sevice_helper.dart';
 import 'features/auth/view/User_type_screen.dart';
+import 'features/auth/view/login_screen.dart';
+import 'features/location/location_screan.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -42,7 +44,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const UserTypeScreen(),
+        home: const live_location(),
       ),
     );
   }

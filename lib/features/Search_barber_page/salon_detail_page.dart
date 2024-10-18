@@ -1,5 +1,6 @@
 import 'package:barber/features/appoinments/calendar_page.dart';
 import 'package:barber/features/favourite/favorites_provide.dart';
+import 'package:barber/features/location/location_screan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
@@ -309,12 +310,14 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                         ClipRRect(
                           key: _locationKey,
                           borderRadius: BorderRadius.circular(12.0),
-                          child: Image.asset(
+                          child: ElevatedButton(onPressed: (){
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const live_location()));
+                          }, child: Image.asset(
                             'assets/images/map1.jpg',
                             width: double.infinity,
                             fit: BoxFit.cover,
                             height: screenHeight * 0.5, // Responsive height
-                          ),
+                          ),)
                         ),
                         const SizedBox(height: 20),
                       ],
