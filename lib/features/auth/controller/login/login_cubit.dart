@@ -19,12 +19,15 @@ class LoginCubit extends Cubit<LoginState> {
   bool isPasswordVisible = true;
   IconData passwordIcon = Icons.remove_red_eye_outlined;
 
-  Future<void> login({required String email, required String password,required BuildContext context }) async {
+  Future<void> login(
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
     emit(LoginLoading());
 
-      try {
-        UserCredential userCredential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: email, password: password);
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
 
       if (!userCredential.user!.emailVerified) {
         emit(LoginEmailNotVerified());
@@ -42,25 +45,25 @@ class LoginCubit extends Cubit<LoginState> {
           }
         });
 
-          emit(LoginSuccess());
-        }
-      } catch (e) {
-        emit(LoginError(e.toString()));
+        emit(LoginSuccess());
       }
+    } catch (e) {
+      emit(LoginError(e.toString()));
     }
+  }
 
-    Future<bool> documentExists(String documentId) async {
-      try {
-        final DocumentSnapshot doc = await FirebaseFirestore.instance
-            .collection('barber_services')
-            .doc(documentId)
-            .get();
-        return doc.exists;
-      } catch (e) {
-        print('Error checking document existence: $e');
-        return false;
-      }
+  Future<bool> documentExists(String documentId) async {
+    try {
+      final DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('barber_services')
+          .doc(documentId)
+          .get();
+      return doc.exists;
+    } catch (e) {
+      print('Error checking document existence: $e');
+      return false;
     }
+  }
 
   void togglePasswordVisibility() {
     isPasswordVisible = !isPasswordVisible;
@@ -70,9 +73,8 @@ class LoginCubit extends Cubit<LoginState> {
     emit(LoginPasswordVisibilityChanged());
   }
 
-    void sendEmailVerification() {
-      FirebaseAuth.instance.currentUser?.sendEmailVerification();
-      emit(EmailVerificationSent());
-    }
+  void sendEmailVerification() {
+    FirebaseAuth.instance.currentUser?.sendEmailVerification();
+    emit(EmailVerificationSent());
   }
 }
