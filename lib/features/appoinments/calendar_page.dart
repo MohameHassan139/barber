@@ -8,18 +8,11 @@ import 'package:barber/models/appointment_model.dart';
 import 'package:barber/features/appoinments/appointment_summery_page.dart';
 
 class CalendarPage extends StatefulWidget {
-  final DateTime? initialDate;
-  final TimeOfDay? initialTime;
-  final List bookedDates;
   final List<Map<String, dynamic>> selectedServices;
 
   const CalendarPage({
     super.key,
-    this.initialDate,
-    this.initialTime,
-    required this.bookedDates,
     required this.selectedServices,
-    required Null Function(dynamic appointmentData) onAppointmentSaved,
   });
 
   @override
@@ -35,8 +28,54 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
-    _selectedDate = widget.initialDate ?? DateTime.now();
-    _selectedTime = widget.initialTime ?? TimeOfDay.now();
+    _selectedDate = DateTime.now();
+    _selectedTime = TimeOfDay.now();
+  }
+
+  void _addAppointment() async {
+    try {
+      // Create a reference to the Firestore collection
+      CollectionReference appointments =
+          FirebaseFirestore.instance.collection('appointments');
+
+      // Convert TimeOfDay to a string format (e.g., "HH:mm")
+      String appointmentTime = _selectedTime!.format(context);
+
+      // Create a new appointment document
+      await appointments.add({
+        'userId': FirebaseAuth.instance.currentUser?.uid,
+        'services': widget
+            .selectedServices, // Assuming this is a List<Map<String, dynamic>>
+        'appointmentDate': _selectedDate,
+        'appointmentTime': appointmentTime, // Store as string
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Appointment booked successfully!'),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AppointmentSummaryPage(),
+        ),
+      );
+    } catch (e) {
+      // Handle errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to book appointment: $e'),
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -162,52 +201,6 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
       ),
     );
-  }
-
-  void _addAppointment() async {
-    try {
-      // Create a reference to the Firestore collection
-      CollectionReference appointments =
-          FirebaseFirestore.instance.collection('appointments');
-
-      // Convert TimeOfDay to a string format (e.g., "HH:mm")
-      String appointmentTime = _selectedTime!.format(context);
-
-      // Create a new appointment document
-      await appointments.add({
-        'userId': FirebaseAuth.instance.currentUser?.uid,
-        'services': widget
-            .selectedServices, // Assuming this is a List<Map<String, dynamic>>
-        'appointmentDate': _selectedDate,
-        'appointmentTime': appointmentTime, // Store as string
-        'createdAt': FieldValue.serverTimestamp(),
-      });
-
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Appointment booked successfully!'),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.green,
-        ),
-      );
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AppointmentSummaryPage(),
-        ),
-      );
-    } catch (e) {
-      // Handle errors
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to book appointment: $e'),
-          duration: const Duration(seconds: 2),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
   }
 
   Future<void> _pickTime() async {

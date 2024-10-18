@@ -103,10 +103,7 @@ class _ServicesPageState extends State<ServicesPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => CalendarPage(
-                              bookedDates: const [],
                               selectedServices: selectedServices,
-                              onAppointmentSaved:
-                                  (appointmentData) {}, // Change here
                             ),
                           ),
                         );

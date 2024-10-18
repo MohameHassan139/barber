@@ -86,9 +86,7 @@ class _SalonDetailPageState extends State<SalonDetailPage>
       context,
       MaterialPageRoute(
         builder: (context) => CalendarPage(
-          bookedDates: const [],
           selectedServices: const [],
-          onAppointmentSaved: (appointmentData) {},
         ),
       ),
     );
@@ -159,7 +157,7 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                     child: Hero(
                       tag: 'salon_image',
                       child: Image.asset(
-                        'assets/images/salon1.jpeg',
+                        'assets/images/map1.jpg',
                         height: screenHeight * 0.25, // Responsive height
                         width: double.infinity,
                         fit: BoxFit.cover,
