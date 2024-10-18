@@ -2,9 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:provider/provider.dart';
-import 'package:barber/features/appoinments/appointment_provider.dart';
-import 'package:barber/models/appointment_model.dart';
 import 'package:barber/features/appoinments/appointment_summery_page.dart';
 
 class CalendarPage extends StatefulWidget {
