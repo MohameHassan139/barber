@@ -19,7 +19,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.3.4 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -28,10 +28,10 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  cached_network_image: ^3.4.1
-  cloud_firestore: ^5.4.2
+  cached_network_image: ^3.4.0
+  cloud_firestore: ^5.4.0
   country_code_picker: ^3.0.0
-  cupertino_icons: ^1.0.6
+  cupertino_icons: ^1.0.0
   firebase_auth: any
   firebase_core: any
 
@@ -40,12 +40,13 @@ dependencies:
     sdk: flutter
   flutter_animate: ^4.5.0
   flutter_bloc: ^8.1.6
+  flutter_credit_card: ^4.0.1
   flutter_rating_bar: ^4.0.1
   form_validator: ^2.1.1
-  google_maps_flutter: ^2.9.0
+  google_maps_flutter: ^2.6.1
   image_picker: ^1.1.2
   location: ^6.0.2
-  shared_preferences: ^2.3.2
+  shared_preferences: ^2.2.3
   shimmer: ^3.0.0
   table_calendar: ^3.1.2
 

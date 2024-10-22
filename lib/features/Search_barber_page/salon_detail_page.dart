@@ -307,18 +307,18 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                         const Text('Location:',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         const SizedBox(height: 8),
-                        ClipRRect(
-                          key: _locationKey,
-                          borderRadius: BorderRadius.circular(12.0),
-                          child: ElevatedButton(onPressed: (){
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const live_location()));
-                          }, child: Image.asset(
-                            'assets/images/map1.jpg',
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            height: screenHeight * 0.5, // Responsive height
-                          ),)
-                        ),
+                        // ClipRRect(
+                        //   key: _locationKey,
+                        //   borderRadius: BorderRadius.circular(12.0),
+                        //   child: ElevatedButton(onPressed: (){
+                        //     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const live_location()));
+                        //   }, child: Image.asset(
+                        //     'assets/images/map1.jpg',
+                        //     width: double.infinity,
+                        //     fit: BoxFit.cover,
+                        //     height: screenHeight * 0.5, // Responsive height
+                        //   ),)
+                        // ),
                         const SizedBox(height: 20),
                       ],
                     ),

@@ -8,6 +8,7 @@ import 'features/add_service/firebase_sevice_helper.dart';
 import 'features/auth/view/User_type_screen.dart';
 import 'features/auth/view/login_screen.dart';
 import 'features/location/location_screan.dart';
+import 'features/payment/payment_screen.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -39,12 +40,13 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const live_location(),
+        home: const UserTypeScreen(),
       ),
     );
   }

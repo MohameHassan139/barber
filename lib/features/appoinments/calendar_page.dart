@@ -1,3 +1,4 @@
+import 'package:barber/features/payment/payment_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,49 +31,16 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   void _addAppointment() async {
-    try {
-      // Create a reference to the Firestore collection
-      CollectionReference appointments =
-          FirebaseFirestore.instance.collection('appointments');
-
-      // Convert TimeOfDay to a string format (e.g., "HH:mm")
-      String appointmentTime = _selectedTime!.format(context);
-
-      // Create a new appointment document
-      await appointments.add({
-        'userId': FirebaseAuth.instance.currentUser?.uid,
-        'services': widget
-            .selectedServices, // Assuming this is a List<Map<String, dynamic>>
-        'appointmentDate': _selectedDate,
-        'appointmentTime': appointmentTime, // Store as string
-        'createdAt': FieldValue.serverTimestamp(),
-      });
-
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Appointment booked successfully!'),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.green,
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentScreen(
+          selectedServices: widget.selectedServices,
+          selectedDate: _selectedDate,
+          selectedTime: _selectedTime,
         ),
-      );
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AppointmentSummaryPage(),
-        ),
-      );
-    } catch (e) {
-      // Handle errors
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to book appointment: $e'),
-          duration: const Duration(seconds: 2),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
+      ),
+    );
   }
 
   @override
@@ -83,7 +51,10 @@ class _CalendarPageState extends State<CalendarPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Choose Appointment"),
+        title: const Text(
+          "Choose Appointment",
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.blueGrey[900],
         elevation: 10,
       ),
