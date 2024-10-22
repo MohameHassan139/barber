@@ -29,7 +29,7 @@ class LoginCubit extends Cubit<LoginState> {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
-      if (!userCredential.user!.emailVerified) {
+      if (userCredential.user!.emailVerified) {
         emit(LoginEmailNotVerified());
       } else {
         CacheHelper.setEmail(email);

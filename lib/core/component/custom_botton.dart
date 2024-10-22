@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import '../../constants/app_colors.dart';
 import 'custom_outline.dart';
+
 class CustomBottom extends StatelessWidget {
   VoidCallback? onTap;
   String text;
-
+  Color? color1;
+  Color? color2;
   bool? isloading = true;
-  CustomBottom({super.key, this.onTap, required this.text, this.isloading});
+  CustomBottom(
+      {super.key,
+      this.color1,
+      this.color2,
+      this.onTap,
+      required this.text,
+      this.isloading});
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -20,12 +29,12 @@ class CustomBottom extends StatelessWidget {
         child: CustomOutline(
           strokeWidth: 3,
           radius: 20,
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              CustomColors.kPinkColor,
-              CustomColors.kGreenColor,
+              color1 ?? CustomColors.kPinkColor,
+              color2 ?? CustomColors.kGreenColor,
             ],
           ),
           width: 160,
@@ -38,8 +47,8 @@ class CustomBottom extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  CustomColors.kPinkColor.withOpacity(0.5),
-                  CustomColors.kGreenColor.withOpacity(0.5),
+                  color1 ?? CustomColors.kPinkColor.withOpacity(0.5),
+                  color2 ?? CustomColors.kGreenColor.withOpacity(0.5),
                 ],
               ),
             ),
