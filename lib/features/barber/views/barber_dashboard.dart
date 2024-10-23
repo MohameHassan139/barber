@@ -3,6 +3,7 @@ import 'package:barber/features/barber/views/appointment_details.dart';
 import 'package:barber/features/barber/views/settings_view.dart';
 import 'package:barber/features/barber/views/stats_view.dart';
 import 'package:barber/features/barber/widgets/appointment_card.dart';
+import 'package:barber/models/appointment_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +94,7 @@ class _HomeBodyState extends State<HomeBody> {
     super.initState();
   }
 
-  List services = [];
+  List<AppointmentModel> services = [];
   bool loading = false;
   Future getservices() async {
     setState(() {
@@ -108,7 +109,7 @@ class _HomeBodyState extends State<HomeBody> {
     });
   }
 
-  Future getAppointment() async {
+  Future<List<AppointmentModel>> getAppointment() async {
     CollectionReference services =
         FirebaseFirestore.instance.collection('appointments');
     QuerySnapshot querySnapshot = await services
@@ -118,7 +119,10 @@ class _HomeBodyState extends State<HomeBody> {
         )
         .get();
 
-    return querySnapshot.docs;
+    return querySnapshot.docs
+        .map((doc) =>
+            AppointmentModel.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
   }
 
   @override
@@ -147,7 +151,7 @@ class _HomeBodyState extends State<HomeBody> {
                         return Column(
                           children: [
                             AppointmentCard(
-                                // services: services[index],
+                                service: services[index],
                                 appointment: appointments[index]),
                             const SizedBox(
                                 height: 16), // Adjust this value for more space

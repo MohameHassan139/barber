@@ -1,3 +1,4 @@
+import 'package:barber/models/appointment_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,9 +10,11 @@ class AppointmentDetailsPage extends StatelessWidget {
   final String barberName;
   final double price;
   final String status;
+  final AppointmentModel service;
 
   const AppointmentDetailsPage({
     super.key,
+    required this.service,
     required this.clientName,
     required this.serviceType,
     required this.timeSlot,

@@ -7,12 +7,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppointmentCard extends StatelessWidget {
   final Appointment appointment;
-  // final AppointmentModel services;
+  final AppointmentModel service;
 
   const AppointmentCard({
     super.key,
     required this.appointment,
-    // required this.services,
+    required this.service,
   });
 
   @override
@@ -23,6 +23,7 @@ class AppointmentCard extends StatelessWidget {
       closedElevation: 4,
       transitionDuration: const Duration(milliseconds: 500),
       openBuilder: (context, _) => AppointmentDetailsPage(
+        service: service,
         clientName: appointment.clientName,
         serviceType: appointment.serviceType,
         timeSlot: appointment.timeSlot,
