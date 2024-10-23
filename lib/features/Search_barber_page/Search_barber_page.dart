@@ -1,4 +1,6 @@
 import 'package:barber/features/Search_barber_page/salon_detail_page.dart';
+import 'package:barber/models/barber_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart'; // Import the animation package
 
@@ -10,36 +12,59 @@ class SearchBarberPage extends StatefulWidget {
 }
 
 class _SearchBarberPageState extends State<SearchBarberPage> {
-  final List<Map<String, String>> _barberShops = [
-    {"title": "Barber Shop 1", "subtitle": "Location: Cairo"},
-    {"title": "Barber Shop 2", "subtitle": "Location: Alexandria"},
-    {"title": "Barber Shop 3", "subtitle": "Location: Giza"},
-    {"title": "Barber Shop 4", "subtitle": "Location: Menia"},
-    {"title": "Barber Shop 5", "subtitle": "Location: Damietta"},
-    {"title": "Barber Shop 6", "subtitle": "Location: Qena"},
-    {"title": "Barber Shop 7", "subtitle": "Location: Aswan"},
-    {"title": "Barber Shop 8", "subtitle": "Location: Port Said"},
-    {"title": "Barber Shop 9", "subtitle": "Location: Beheira"},
-    {"title": "Barber Shop 10", "subtitle": "Location: Sohag"},
-    {"title": "Barber Shop 11", "subtitle": "Location: Luxor"},
-    {"title": "Barber Shop 12", "subtitle": "Location: Tanta"},
-    {"title": "Barber Shop 13", "subtitle": "Location: Zagazig"},
-  ];
+  List<BarberModel> _barberShops = [];
 
-  List<Map<String, String>> _filteredBarberShops = [];
+  Future<List<BarberModel>> getBarbers() async {
+    CollectionReference barbers =
+        FirebaseFirestore.instance.collection('Barbers');
+    QuerySnapshot querySnapshot = await barbers.get();
+    List<BarberModel> barbersList;
+
+    barbersList = querySnapshot.docs
+        .map((doc) => BarberModel.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+    return barbersList;
+  }
+
+  getBarbersData() async {
+    _barberShops = [];
+    _filteredBarberShops = [];
+    _barberShops.addAll(await getBarbers());
+
+    _filteredBarberShops.addAll(_barberShops);
+    setState(() {});
+  }
+
+  // final List<Map<String, String>> _barberShops = [
+  //   {"title": "Barber Shop 1", "subtitle": "Location: Cairo"},
+  //   {"title": "Barber Shop 2", "subtitle": "Location: Alexandria"},
+  //   {"title": "Barber Shop 3", "subtitle": "Location: Giza"},
+  //   {"title": "Barber Shop 4", "subtitle": "Location: Menia"},
+  //   {"title": "Barber Shop 5", "subtitle": "Location: Damietta"},
+  //   {"title": "Barber Shop 6", "subtitle": "Location: Qena"},
+  //   {"title": "Barber Shop 7", "subtitle": "Location: Aswan"},
+  //   {"title": "Barber Shop 8", "subtitle": "Location: Port Said"},
+  //   {"title": "Barber Shop 9", "subtitle": "Location: Beheira"},
+  //   {"title": "Barber Shop 10", "subtitle": "Location: Sohag"},
+  //   {"title": "Barber Shop 11", "subtitle": "Location: Luxor"},
+  //   {"title": "Barber Shop 12", "subtitle": "Location: Tanta"},
+  //   {"title": "Barber Shop 13", "subtitle": "Location: Zagazig"},
+  // ];
+
+  List<BarberModel> _filteredBarberShops = [];
 
   @override
   void initState() {
     super.initState();
-    _filteredBarberShops = _barberShops; // Initially show all barber shops
+    getBarbersData();
   }
 
   void _filterBarberShops(String query) {
-    setState(() {
-      _filteredBarberShops = _barberShops.where((shop) {
-        return shop["title"]!.toLowerCase().contains(query.toLowerCase());
-      }).toList();
-    });
+    // setState(() {
+    //   _filteredBarberShops = _barberShops.where((shop) {
+    //     return shop["title"]!.toLowerCase().contains(query.toLowerCase());
+    //   }).toList();
+    // });
   }
 
   @override
@@ -49,6 +74,16 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
 
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                getBarbersData();
+              },
+              icon: Icon(
+                Icons.get_app,
+                color: Colors.white,
+              ))
+        ],
         title: const Text("Search for Barber Shop"),
         centerTitle: true,
         backgroundColor: Colors.blueGrey[900],
@@ -106,8 +141,8 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
                         .asMap()
                         .entries
                         .map(
-                          (entry) => _buildClickableBarberShopCard(
-                              context, entry.value, entry.key),
+                          (entry) => _buildClickableBarberShopCard(context,
+                              _filteredBarberShops[entry.key], entry.key),
                         )
                         .toList()
                     : [
@@ -131,24 +166,26 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
 
   // Clickable BarberShop Card with Transition
   Widget _buildClickableBarberShopCard(
-      BuildContext context, Map<String, String> shop, int index) {
+      BuildContext context, BarberModel shop, int index) {
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => SalonDetailPage(
-              title: shop["title"]!,
-              subtitle: shop["subtitle"]!,
+              title: shop.name ?? '',
+              subtitle: shop.bio ?? '',
             ),
           ),
         );
       },
       child: _buildBarberShopCard(
         context,
-        title: shop["title"]!,
-        subtitle: shop["subtitle"]!,
-        icon: Icons.store,
+        // title: shop["title"]!,
+        // subtitle: shop["subtitle"]!,
+        title: shop.name ?? '',
+        subtitle: shop.bio ?? '',
+        icon: shop.profileImage ?? '',
       )
           .animate(delay: (index * 100).ms) // Delayed fade-in for each item
           .fadeIn(duration: 500.ms) // Fade in effect
@@ -160,7 +197,7 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
     BuildContext context, {
     required String title,
     required String subtitle,
-    required IconData icon,
+    required String icon,
   }) {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
@@ -178,7 +215,18 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
           borderRadius: BorderRadius.circular(12),
         ),
         child: ListTile(
-          leading: Icon(icon, color: Colors.blueGrey[700]),
+          leading: Container(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(55),
+            ),
+            child: Image.network(
+              width: 60,
+              height: 60,
+              fit: BoxFit.cover,
+              icon,
+            ),
+          ),
           title: Text(
             title,
             style: const TextStyle(

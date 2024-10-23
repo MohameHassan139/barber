@@ -1,4 +1,5 @@
 import 'package:barber/features/add_service/controller/get_service_cubit/get_service_cubit.dart';
+import 'package:barber/features/auth/view/User_type_screen.dart';
 import 'package:barber/features/barber/views/barber_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
