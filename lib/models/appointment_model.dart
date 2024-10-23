@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
 
 class AppointmentModel {
-  final DateTime date;
-  final TimeOfDay time;
-  final List<Map<String, dynamic>> selectedServices;
+  String? barberId;
+  String? userId;
 
   AppointmentModel({
-    required this.date,
-    required this.time,
-    required this.selectedServices,
+    this.barberId,
+    this.userId,
   });
+
+  factory AppointmentModel.fromJson(Map<String, dynamic> json) {
+    return AppointmentModel(
+      barberId: json['barberId'],
+      userId: json['userId'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'barberId': barberId,
+      'userId': userId,
+    };
+  }
 }

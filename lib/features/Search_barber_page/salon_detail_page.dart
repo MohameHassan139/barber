@@ -8,11 +8,13 @@ import 'package:provider/provider.dart';
 class SalonDetailPage extends StatefulWidget {
   final String title;
   final String subtitle;
+  final String barberId;
 
   const SalonDetailPage({
     super.key,
     required this.title,
     required this.subtitle,
+    required this.barberId,
   });
 
   @override
@@ -86,8 +88,9 @@ class _SalonDetailPageState extends State<SalonDetailPage>
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const CalendarPage(
+        builder: (context) => CalendarPage(
           selectedServices: [],
+          barberId: widget.barberId,
         ),
       ),
     );

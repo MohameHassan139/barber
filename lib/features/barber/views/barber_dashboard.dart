@@ -3,6 +3,8 @@ import 'package:barber/features/barber/views/appointment_details.dart';
 import 'package:barber/features/barber/views/settings_view.dart';
 import 'package:barber/features/barber/views/stats_view.dart';
 import 'package:barber/features/barber/widgets/appointment_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -20,7 +22,8 @@ class _BarberDashboardState extends State<BarberDashboard> {
   @override
   void initState() {
     super.initState();
-    _pages.add(_buildHomeBody());
+
+    _pages.add(HomeBody());
     _pages.add(const StatsView());
     _pages.add(const SettingsView());
   }
@@ -74,37 +77,87 @@ class _BarberDashboardState extends State<BarberDashboard> {
       body: _pages[_selectedIndex], // Show the selected page
     );
   }
+}
 
-  Widget _buildHomeBody() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Today\'s Appointments',
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
+class HomeBody extends StatefulWidget {
+  const HomeBody({super.key});
+
+  @override
+  State<HomeBody> createState() => _HomeBodyState();
+}
+
+class _HomeBodyState extends State<HomeBody> {
+  @override
+  void initState() {
+    getservices();
+    super.initState();
+  }
+
+  List services = [];
+  bool loading = false;
+  Future getservices() async {
+    setState(() {
+      loading = true;
+    });
+    // get services
+
+    services = await getAppointment();
+
+    setState(() {
+      loading = false;
+    });
+  }
+
+  Future getAppointment() async {
+    CollectionReference services =
+        FirebaseFirestore.instance.collection('appointments');
+    QuerySnapshot querySnapshot = await services
+        .where(
+          'barberId',
+          isEqualTo: FirebaseAuth.instance.currentUser?.email,
+        )
+        .get();
+
+    return querySnapshot.docs;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Today\'s Appointments',
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              itemCount: appointments.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    AppointmentCard(appointment: appointments[index]),
-                    const SizedBox(
-                        height: 16), // Adjust this value for more space
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
+            const SizedBox(height: 16),
+            loading
+                ? Center(child: CircularProgressIndicator())
+                : Expanded(
+                    child: ListView.builder(
+                      itemCount: services.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            AppointmentCard(
+                                // services: services[index],
+                                appointment: appointments[index]),
+                            const SizedBox(
+                                height: 16), // Adjust this value for more space
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+          ],
+        ),
       ),
     );
   }

@@ -11,10 +11,12 @@ import '../home/HomePage.dart';
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({
     super.key,
+    required this.barberId,
     required this.selectedDate,
     required this.selectedTime,
     required this.selectedServices,
   });
+  final String? barberId;
   final DateTime? selectedDate;
   final TimeOfDay? selectedTime;
   final List<Map<String, dynamic>> selectedServices;
@@ -97,6 +99,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       // Create a new appointment document
       await appointments.add({
         'userId': FirebaseAuth.instance.currentUser?.uid,
+        'barberId': widget.barberId,
         'services': widget
             .selectedServices, // Assuming this is a List<Map<String, dynamic>>
         'appointmentDate': widget.selectedDate,

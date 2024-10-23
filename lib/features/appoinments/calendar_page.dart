@@ -4,9 +4,10 @@ import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
   final List<Map<String, dynamic>> selectedServices;
-
+  final String barberId;
   const CalendarPage({
     super.key,
+    required this.barberId,
     required this.selectedServices,
   });
 
@@ -32,6 +33,7 @@ class _CalendarPageState extends State<CalendarPage> {
       context,
       MaterialPageRoute(
         builder: (context) => PaymentScreen(
+          barberId: widget.barberId,
           selectedServices: widget.selectedServices,
           selectedDate: _selectedDate,
           selectedTime: _selectedTime,

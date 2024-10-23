@@ -1,6 +1,7 @@
 import 'package:barber/features/Search_barber_page/salon_detail_page.dart';
 import 'package:barber/models/barber_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart'; // Import the animation package
 
@@ -17,7 +18,9 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
   Future<List<BarberModel>> getBarbers() async {
     CollectionReference barbers =
         FirebaseFirestore.instance.collection('Barbers');
-    QuerySnapshot querySnapshot = await barbers.get();
+    QuerySnapshot querySnapshot = await barbers
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+        .get();
     List<BarberModel> barbersList;
 
     barbersList = querySnapshot.docs
@@ -175,6 +178,7 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
             builder: (context) => SalonDetailPage(
               title: shop.name ?? '',
               subtitle: shop.bio ?? '',
+              barberId: shop.email ?? '',
             ),
           ),
         );

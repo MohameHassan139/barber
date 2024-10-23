@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:barber/features/appoinments/calendar_page.dart';
 
 class ServicesPage extends StatefulWidget {
-  const ServicesPage({super.key});
-
+  ServicesPage({super.key, required this.barberId});
+  String barberId;
   @override
   _ServicesPageState createState() => _ServicesPageState();
 }
@@ -104,6 +104,7 @@ class _ServicesPageState extends State<ServicesPage> {
                           MaterialPageRoute(
                             builder: (context) => CalendarPage(
                               selectedServices: selectedServices,
+                              barberId: widget.barberId,
                             ),
                           ),
                         );

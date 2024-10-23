@@ -1,15 +1,18 @@
 import 'package:animations/animations.dart';
 import 'package:barber/features/barber/views/appointment_details.dart';
 import 'package:barber/features/barber/widgets/appointment_details_page.dart';
+import 'package:barber/models/appointment_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppointmentCard extends StatelessWidget {
   final Appointment appointment;
+  // final AppointmentModel services;
 
   const AppointmentCard({
     super.key,
     required this.appointment,
+    // required this.services,
   });
 
   @override
