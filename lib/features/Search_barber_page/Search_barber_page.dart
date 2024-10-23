@@ -18,9 +18,7 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
   Future<List<BarberModel>> getBarbers() async {
     CollectionReference barbers =
         FirebaseFirestore.instance.collection('Barbers');
-    QuerySnapshot querySnapshot = await barbers
-        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
-        .get();
+    QuerySnapshot querySnapshot = await barbers.get();
     List<BarberModel> barbersList;
 
     barbersList = querySnapshot.docs
@@ -78,16 +76,17 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-              onPressed: () {
-                getBarbersData();
-              },
-              icon: Icon(
-                Icons.get_app,
-                color: Colors.white,
-              ))
+          // IconButton(
+          //     onPressed: () {
+          //       getBarbersData();
+          //     },
+          //     icon: Icon(
+          //       Icons.get_app,
+          //       color: Colors.white,
+          //     ))
         ],
-        title: const Text("Search for Barber Shop"),
+        title: Text("Search for Barber Shop",
+            style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: Colors.blueGrey[900],
         elevation: 4,
@@ -138,27 +137,32 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
             const SizedBox(height: 20),
             // Stylish List of Search Results with Gradient Cards and Fade Animation
             Expanded(
-              child: ListView(
-                children: _filteredBarberShops.isNotEmpty
-                    ? _filteredBarberShops
-                        .asMap()
-                        .entries
-                        .map(
-                          (entry) => _buildClickableBarberShopCard(context,
-                              _filteredBarberShops[entry.key], entry.key),
-                        )
-                        .toList()
-                    : [
-                        Center(
-                          child: Text(
-                            'No results found',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.blueGrey[600],
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  getBarbersData();
+                },
+                child: ListView(
+                  children: _filteredBarberShops.isNotEmpty
+                      ? _filteredBarberShops
+                          .asMap()
+                          .entries
+                          .map(
+                            (entry) => _buildClickableBarberShopCard(context,
+                                _filteredBarberShops[entry.key], entry.key),
+                          )
+                          .toList()
+                      : [
+                          Center(
+                            child: Text(
+                              'No results found',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.blueGrey[600],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                ),
               ),
             ),
           ],

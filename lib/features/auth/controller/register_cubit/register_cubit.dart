@@ -1,3 +1,5 @@
+import 'package:barber/core/function/push_screen.dart';
+import 'package:barber/features/home/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -51,7 +53,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     emit(state.copyWith(isPasswordHidden: !state.isPasswordHidden));
   }
 
-  Future<void> signUp() async {
+  Future<void> signUp(BuildContext context) async {
     if (passwordTextController.text != rePasswordTextController.text) {
       emit(state.copyWith(passwordsMatch: false));
       return;
@@ -78,6 +80,10 @@ class RegisterCubit extends Cubit<RegisterState> {
         await _createUser(model);
 
         emit(state.copyWith(isEmailVerified: true, isLoading: false));
+        pushAndRemoveUntil(
+          context: context,
+          screen: const HomePage(),
+        );
       });
     } catch (e) {
       print(e);

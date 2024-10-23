@@ -1,4 +1,5 @@
 import 'package:barber/features/appoinments/Appointment_summery_page.dart';
+import 'package:barber/features/auth/view/User_type_screen.dart';
 import 'package:barber/features/data_performance/data_performance_page.dart';
 import 'package:barber/features/favourite/favorites_page.dart';
 import 'package:barber/features/profile/user_details_page.dart';
@@ -256,7 +257,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 // Clear user session and navigate to login page
                 await FirebaseAuth.instance.signOut();
                 Navigator.pop(context); // Close the dialog
-                Navigator.pushReplacementNamed(context, '/login'); // Example
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const UserTypeScreen())); // Example
               },
               child: const Text('Logout'),
             ),
