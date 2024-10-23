@@ -256,7 +256,7 @@ class AppointmentDetailsPage extends StatelessWidget {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.BOTTOM,
-      toastDuration: const Duration(seconds: 2),
+      toastDuration: const Duration(seconds: 4),
     );
   }
 
@@ -273,6 +273,8 @@ class AppointmentDetailsPage extends StatelessWidget {
           .update({
         'status': 'confirmed',
       });
+      showCustomToast(context, "Confirmed appointment.", Colors.teal);
+
       Navigator.pop(context);
     } else {
       showCustomToast(context, "Already confirmed.", Colors.teal);
@@ -292,6 +294,8 @@ class AppointmentDetailsPage extends StatelessWidget {
           .update({
         'status': 'cancelled',
       });
+      showCustomToast(context, "Cancelled appointment.", Colors.red);
+
       Navigator.pop(context);
     } else {
       showCustomToast(context, "Already cancelled.", Colors.red);

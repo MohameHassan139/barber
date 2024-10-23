@@ -1,3 +1,4 @@
+import 'package:barber/features/barber/views/barber_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,7 +36,10 @@ class LoginCubit extends Cubit<LoginState> {
         CacheHelper.setEmail(email);
         documentExists(email).then((value) {
           if (value) {
-            // barber ui
+            pushAndRemoveUntil(
+              context: context,
+              screen: const BarberDashboard(),
+            );
             // TODO
           } else {
             pushAndRemoveUntil(
@@ -55,7 +59,7 @@ class LoginCubit extends Cubit<LoginState> {
   Future<bool> documentExists(String documentId) async {
     try {
       final DocumentSnapshot doc = await FirebaseFirestore.instance
-          .collection('barber_services')
+          .collection('Barbers')
           .doc(documentId)
           .get();
       return doc.exists;

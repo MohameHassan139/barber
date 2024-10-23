@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:barber/features/barber/views/barber_dashboard.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
@@ -135,10 +136,10 @@ class RegistrationCubit extends Cubit<RegistrationState> {
       });
       CacheHelper.setEmail(email);
 
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => LoginScreen(),
+          builder: (context) => BarberDashboard(),
         ),
       );
       emit(RegistrationSuccess());
