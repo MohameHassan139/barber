@@ -1,3 +1,5 @@
+import 'package:barber/features/auth/view/User_type_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -95,11 +97,89 @@ class SettingsView extends StatelessWidget {
                     // Handle theme change tap
                   },
                 ),
+                _buildStylishListTile(
+                  context,
+                  Icons.logout,
+                  "Logout",
+                  () => _handleLogout(context),
+                ),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  // Method to style the ListTile
+  Widget _buildStylishListTile(
+      BuildContext context, IconData icon, String title, Function onTap) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.red, width: 1.0),
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      height: 60,
+      child: ListTile(
+        // leading: Container(
+        //   padding: const EdgeInsets.all(8.0),
+        //   decoration: BoxDecoration(
+        //     color: Colors.red[900],
+        //     shape: BoxShape.circle,
+        //   ),
+        //   child: Icon(icon, color: Colors.white, size: 24),
+        // ),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+          ),
+        ),
+        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.red),
+        onTap: () => onTap(),
+        tileColor: Colors.white,
+        // contentPadding:
+        //     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+      ),
+    );
+  }
+
+  void _handleLogout(BuildContext context) {
+    // Add your logout logic here, e.g., clearing user session, redirecting to login page
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Clear user session and navigate to login page
+                await FirebaseAuth.instance.signOut();
+                Navigator.pop(context); // Close the dialog
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const UserTypeScreen())); // Example
+              },
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
     );
   }
 

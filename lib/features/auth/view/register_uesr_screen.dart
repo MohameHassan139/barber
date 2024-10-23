@@ -35,7 +35,6 @@ class RegisterScreen extends StatelessWidget {
                           fontSize: 30,
                         ),
                       ),
-                     
                       const SizedBox(
                         height: 20,
                       ),
@@ -116,10 +115,9 @@ class RegisterScreen extends StatelessWidget {
                           : CustomBottom(
                               text: 'Submit',
                               onTap: () {
-                                cubit.signUp();
+                                cubit.signUp(context);
                               },
                             ),
-                      
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
