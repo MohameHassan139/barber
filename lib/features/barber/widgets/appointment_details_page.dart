@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AppointmentDetailsPage extends StatelessWidget {
   final String clientName;
@@ -24,6 +25,7 @@ class AppointmentDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -37,65 +39,66 @@ class AppointmentDetailsPage extends StatelessWidget {
         color: Colors.teal[50],
         padding: EdgeInsets.all(screenWidth * 0.04),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Appointment Details',
-                style: GoogleFonts.poppins(
-                  fontSize: screenWidth * 0.06,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.teal[800],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 8,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(screenWidth * 0.04),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildDetailRow(Icons.workspace_premium, 'Service:',
-                          serviceType, screenWidth),
-                      const SizedBox(height: 10),
-                      _buildDetailRow(
-                          Icons.access_time, 'Time:', timeSlot, screenWidth),
-                      const SizedBox(height: 10),
-                      _buildDetailRow(
-                          Icons.calendar_today, 'Date:', date, screenWidth),
-                      const SizedBox(height: 10),
-                      _buildDetailRow(
-                          Icons.person, 'Barber:', barberName, screenWidth),
-                      const SizedBox(height: 10),
-                      _buildDetailRow(Icons.attach_money, 'Price:',
-                          '\$${price.toStringAsFixed(2)}', screenWidth),
-                      const SizedBox(height: 10),
-                      _buildDetailRow(
-                          Icons.check_circle, 'Status:', status, screenWidth),
-                    ],
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: screenHeight -
+                  kToolbarHeight -
+                  MediaQuery.of(context).padding.top,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Appointment Details',
+                  style: GoogleFonts.poppins(
+                    fontSize: screenWidth * 0.06,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.teal[800],
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildActionButton('Confirm', Colors.teal, () {
-                    // Handle Confirm Action
-                  }),
-                  _buildActionButton('Cancel', Colors.red, () {
-                    // Handle Cancel Action
-                  }),
-                  _buildActionButton('Reschedule', Colors.orange, () {
-                    // Handle Reschedule Action
-                  }),
-                ],
-              ),
-            ],
+                const SizedBox(height: 10),
+                Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(screenWidth * 0.04),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildDetailRow(Icons.workspace_premium, 'Service:',
+                            serviceType, screenWidth),
+                        const SizedBox(height: 8),
+                        _buildDetailRow(
+                            Icons.access_time, 'Time:', timeSlot, screenWidth),
+                        const SizedBox(height: 8),
+                        _buildDetailRow(
+                            Icons.calendar_today, 'Date:', date, screenWidth),
+                        const SizedBox(height: 8),
+                        _buildDetailRow(
+                            Icons.person, 'Barber:', barberName, screenWidth),
+                        const SizedBox(height: 8),
+                        _buildDetailRow(Icons.attach_money, 'Price:',
+                            '\$${price.toStringAsFixed(2)}', screenWidth),
+                        const SizedBox(height: 8),
+                        _buildDetailRow(
+                            Icons.check_circle, 'Status:', status, screenWidth),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                // Action buttons
+                _buildButtonRow(context, screenWidth),
+                const SizedBox(height: 10),
+                _buildButtonRow2(context, screenWidth),
+                const SizedBox(height: 10),
+                _buildAdditionalButtonsRow(context, screenWidth),
+                const SizedBox(height: 10),
+                _buildFinalButtonsRow(context, screenWidth),
+              ],
+            ),
           ),
         ),
       ),
@@ -141,9 +144,113 @@ class AppointmentDetailsPage extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       ),
-      child: Text(label, style: GoogleFonts.poppins()),
+      child: Text(
+        label,
+        style: GoogleFonts.poppins(
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButtonRow(BuildContext context, double screenWidth) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildActionButton('Confirm', Colors.teal, () {
+          showCustomToast(context, "Confirmed appointment.", Colors.teal);
+        }),
+        _buildActionButton('Cancel', Colors.red, () {
+          showCustomToast(context, "Cancelled appointment.", Colors.red);
+        }),
+        _buildActionButton('Reschedule', Colors.orange, () {
+          showCustomToast(context, "Appointment rescheduled.", Colors.orange);
+        }),
+      ],
+    );
+  }
+
+  Widget _buildButtonRow2(BuildContext context, double screenWidth) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildActionButton('Mark Completed', Colors.green, () {
+          showCustomToast(context, "Marked as completed.", Colors.green);
+        }),
+        _buildActionButton('Leave Note', Colors.blue, () {
+          showCustomToast(context, "Note added.", Colors.blue);
+        }),
+      ],
+    );
+  }
+
+  Widget _buildAdditionalButtonsRow(BuildContext context, double screenWidth) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildActionButton('View History', Colors.purple, () {
+          showCustomToast(context, "Viewing history.", Colors.purple);
+        }),
+        _buildActionButton('Add Service', Colors.deepOrange, () {
+          showCustomToast(context, "Added service.", Colors.deepOrange);
+        }),
+      ],
+    );
+  }
+
+  Widget _buildFinalButtonsRow(BuildContext context, double screenWidth) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildActionButton('Modify Appointment', Colors.lightBlue, () {
+          showCustomToast(context, "Modifying appointment.", Colors.lightBlue);
+        }),
+        _buildActionButton('Send Reminder', Colors.pink, () {
+          showCustomToast(context, "Reminder sent.", Colors.pink);
+        }),
+      ],
+    );
+  }
+
+  // Custom FlutterToast function with modern UI
+  void showCustomToast(
+      BuildContext context, String message, Color backgroundColor) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    FToast fToast = FToast();
+    fToast.init(context);
+
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: backgroundColor,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.check, color: Colors.white),
+          const SizedBox(width: 12.0),
+          Flexible(
+            child: Text(
+              message,
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontSize: screenWidth * 0.04,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: const Duration(seconds: 2),
     );
   }
 }
