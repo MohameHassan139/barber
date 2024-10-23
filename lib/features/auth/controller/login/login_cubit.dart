@@ -40,7 +40,7 @@ class LoginCubit extends Cubit<LoginState> {
           } else {
             pushAndRemoveUntil(
               context: context,
-              screen: HomePage(),
+              screen: const HomePage(),
             );
           }
         });

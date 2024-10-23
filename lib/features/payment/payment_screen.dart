@@ -131,7 +131,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text('Payment',
+        title: const Text('Payment',
             style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: 2)),
       ),
       body: SafeArea(
