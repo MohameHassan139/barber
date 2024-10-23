@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:barber/features/barber/views/appointment_details.dart';
 import 'package:barber/features/barber/widgets/appointment_details_page.dart';
 import 'package:flutter/material.dart';
@@ -15,25 +16,23 @@ class AppointmentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    // return openContainer(
-    return Container(
-      // closedElevation: 4,
-      // transitionDuration: const Duration(milliseconds: 500),
-      // openBuilder: (context, _) => AppointmentDetailsPage(
-      //   clientName: appointment.clientName,
-      //   serviceType: appointment.serviceType,
-      //   timeSlot: appointment.timeSlot,
-      //   date: appointment.date,
-      //   barberName: appointment.barberName,
-      //   price: appointment.price,
-      //   status: appointment.status,
-      // ),
-      // closedShape: RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.circular(15),
-      // ),
-      // closedColor: Colors.white,
-      // closedBuilder: (context, openContainer) =>
-      child: Padding(
+    return OpenContainer(
+      closedElevation: 4,
+      transitionDuration: const Duration(milliseconds: 500),
+      openBuilder: (context, _) => AppointmentDetailsPage(
+        clientName: appointment.clientName,
+        serviceType: appointment.serviceType,
+        timeSlot: appointment.timeSlot,
+        date: appointment.date,
+        barberName: appointment.barberName,
+        price: appointment.price,
+        status: appointment.status,
+      ),
+      closedShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      closedColor: Colors.white,
+      closedBuilder: (context, openContainer) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: ListTile(
           contentPadding: const EdgeInsets.all(16),
@@ -79,7 +78,7 @@ class AppointmentCard extends StatelessWidget {
           ),
           trailing:
               const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.teal),
-          // onTap: openContainer,
+          onTap: openContainer,
         ),
       ),
     );

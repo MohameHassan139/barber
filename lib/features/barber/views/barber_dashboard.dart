@@ -21,8 +21,8 @@ class _BarberDashboardState extends State<BarberDashboard> {
   void initState() {
     super.initState();
     _pages.add(_buildHomeBody());
-    _pages.add(StatsView());
-    _pages.add(SettingsView());
+    _pages.add(const StatsView());
+    _pages.add(const SettingsView());
   }
 
   void _onItemTapped(int index) {

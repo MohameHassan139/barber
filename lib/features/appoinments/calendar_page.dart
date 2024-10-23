@@ -1,9 +1,6 @@
 import 'package:barber/features/payment/payment_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:barber/features/appoinments/appointment_summery_page.dart';
 
 class CalendarPage extends StatefulWidget {
   final List<Map<String, dynamic>> selectedServices;

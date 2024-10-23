@@ -86,8 +86,8 @@ class _SalonDetailPageState extends State<SalonDetailPage>
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CalendarPage(
-          selectedServices: const [],
+        builder: (context) => const CalendarPage(
+          selectedServices: [],
         ),
       ),
     );
