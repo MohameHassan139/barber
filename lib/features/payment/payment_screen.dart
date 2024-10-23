@@ -98,6 +98,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
       // Create a new appointment document
       await appointments.add({
+        'appointmentId': '',
+        'status': 'pending',
         'userId': FirebaseAuth.instance.currentUser?.uid,
         'barberId': widget.barberId,
         'services': widget
@@ -105,7 +107,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         'appointmentDate': widget.selectedDate,
         'appointmentTime': appointmentTime, // Store as string
         'createdAt': FieldValue.serverTimestamp(),
-      });
+      }).then((value) => {'appointmentId': value.id});
 
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(

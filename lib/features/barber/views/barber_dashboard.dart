@@ -145,19 +145,27 @@ class _HomeBodyState extends State<HomeBody> {
             loading
                 ? Center(child: CircularProgressIndicator())
                 : Expanded(
-                    child: ListView.builder(
-                      itemCount: services.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            AppointmentCard(
-                                service: services[index],
-                                appointment: appointments[index]),
-                            const SizedBox(
-                                height: 16), // Adjust this value for more space
-                          ],
-                        );
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        await getservices();
                       },
+                      child: ListView.builder(
+                        itemCount: services.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              AppointmentCard(
+                                  status: services[index].status ?? '',
+                                  appointmentId:
+                                      services[index].appointmentId ?? '',
+                                  appointment: appointments[index]),
+                              const SizedBox(
+                                  height:
+                                      16), // Adjust this value for more space
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
           ],

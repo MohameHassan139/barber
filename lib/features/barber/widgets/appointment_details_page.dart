@@ -1,4 +1,5 @@
 import 'package:barber/models/appointment_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,11 +12,11 @@ class AppointmentDetailsPage extends StatelessWidget {
   final String barberName;
   final double price;
   final String status;
-  final AppointmentModel service;
+  final String appointmentId;
 
   const AppointmentDetailsPage({
     super.key,
-    required this.service,
+    required this.appointmentId,
     required this.clientName,
     required this.serviceType,
     required this.timeSlot,
@@ -163,10 +164,12 @@ class AppointmentDetailsPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _buildActionButton('Confirm', Colors.teal, () {
-          showCustomToast(context, "Confirmed appointment.", Colors.teal);
+          confirmAppointment(context);
+          // showCustomToast(context, "Confirmed appointment.", Colors.teal);
         }),
         _buildActionButton('Cancel', Colors.red, () {
-          showCustomToast(context, "Cancelled appointment.", Colors.red);
+          cancelAppointment(context);
+          // showCustomToast(context, "Cancelled appointment.", Colors.red);
         }),
         _buildActionButton('Reschedule', Colors.orange, () {
           showCustomToast(context, "Appointment rescheduled.", Colors.orange);
@@ -255,5 +258,43 @@ class AppointmentDetailsPage extends StatelessWidget {
       gravity: ToastGravity.BOTTOM,
       toastDuration: const Duration(seconds: 2),
     );
+  }
+
+  void confirmAppointment(BuildContext context) async {
+    if (status == 'pending') {
+      CollectionReference appointments =
+          FirebaseFirestore.instance.collection('appointments');
+
+      // Create a new appointment document
+      await appointments
+          .doc(
+        appointmentId,
+      )
+          .update({
+        'status': 'confirmed',
+      });
+      Navigator.pop(context);
+    } else {
+      showCustomToast(context, "Already confirmed.", Colors.teal);
+    }
+  }
+
+  void cancelAppointment(BuildContext context) async {
+    if (status == 'pending') {
+      CollectionReference appointments =
+          FirebaseFirestore.instance.collection('appointments');
+
+      // Create a new appointment document
+      await appointments
+          .doc(
+        appointmentId,
+      )
+          .update({
+        'status': 'cancelled',
+      });
+      Navigator.pop(context);
+    } else {
+      showCustomToast(context, "Already cancelled.", Colors.red);
+    }
   }
 }

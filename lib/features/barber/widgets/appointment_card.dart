@@ -7,12 +7,14 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppointmentCard extends StatelessWidget {
   final Appointment appointment;
-  final AppointmentModel service;
+  final String appointmentId;
+  final String status;
 
   const AppointmentCard({
     super.key,
     required this.appointment,
-    required this.service,
+    required this.appointmentId,
+    required this.status,
   });
 
   @override
@@ -22,16 +24,18 @@ class AppointmentCard extends StatelessWidget {
     return OpenContainer(
       closedElevation: 4,
       transitionDuration: const Duration(milliseconds: 500),
-      openBuilder: (context, _) => AppointmentDetailsPage(
-        service: service,
-        clientName: appointment.clientName,
-        serviceType: appointment.serviceType,
-        timeSlot: appointment.timeSlot,
-        date: appointment.date,
-        barberName: appointment.barberName,
-        price: appointment.price,
-        status: appointment.status,
-      ),
+      openBuilder: (context, _) {
+        return AppointmentDetailsPage(
+          appointmentId: appointmentId,
+          clientName: appointment.clientName,
+          serviceType: appointment.serviceType,
+          timeSlot: appointment.timeSlot,
+          date: appointment.date,
+          barberName: appointment.barberName,
+          price: appointment.price,
+          status: appointment.status,
+        );
+      },
       closedShape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
@@ -80,8 +84,17 @@ class AppointmentCard extends StatelessWidget {
               ),
             ],
           ),
-          trailing:
-              const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.teal),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.teal),
+              status == 'confirmed'
+                  ? const CircleAvatar(backgroundColor: Colors.green)
+                  : status == 'cancelled'
+                      ? const CircleAvatar(backgroundColor: Colors.red)
+                      : const CircleAvatar(backgroundColor: Colors.amber),
+            ],
+          ),
           onTap: openContainer,
         ),
       ),
