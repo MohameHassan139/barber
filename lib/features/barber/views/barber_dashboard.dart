@@ -24,7 +24,7 @@ class _BarberDashboardState extends State<BarberDashboard> {
   void initState() {
     super.initState();
 
-    _pages.add(HomeBody());
+    _pages.add(const HomeBody());
     _pages.add(const StatsView());
     _pages.add(const SettingsView());
   }
@@ -143,7 +143,7 @@ class _HomeBodyState extends State<HomeBody> {
             ),
             const SizedBox(height: 16),
             loading
-                ? Center(child: CircularProgressIndicator())
+                ? const Center(child: CircularProgressIndicator())
                 : Expanded(
                     child: RefreshIndicator(
                       onRefresh: () async {

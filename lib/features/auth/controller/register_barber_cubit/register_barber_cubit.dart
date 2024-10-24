@@ -10,7 +10,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/utils/cashe_helper.dart';
-import '../../view/login_screen.dart';
 import 'register_barner_state.dart';
 
 // States for RegistrationCubit
@@ -139,7 +138,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => BarberDashboard(),
+          builder: (context) => const BarberDashboard(),
         ),
       );
       emit(RegistrationSuccess());

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class AppointmentModel {
   String? barberId;
   String? userId;

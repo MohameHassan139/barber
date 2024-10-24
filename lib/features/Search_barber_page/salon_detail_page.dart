@@ -1,6 +1,5 @@
 import 'package:barber/features/appoinments/calendar_page.dart';
 import 'package:barber/features/favourite/favorites_provide.dart';
-import 'package:barber/features/location/location_screan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
@@ -89,7 +88,7 @@ class _SalonDetailPageState extends State<SalonDetailPage>
       context,
       MaterialPageRoute(
         builder: (context) => CalendarPage(
-          selectedServices: [],
+          selectedServices: const [],
           barberId: widget.barberId,
         ),
       ),

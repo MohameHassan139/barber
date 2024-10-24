@@ -82,7 +82,7 @@ class _SearchBarberPageState extends State<SearchBarberPage> {
               onPressed: () {
                 getBarbersData();
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.get_app,
                 color: Colors.white,
               ))
