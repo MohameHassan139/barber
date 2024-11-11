@@ -159,12 +159,20 @@ class _SalonDetailPageState extends State<SalonDetailPage>
                     borderRadius: BorderRadius.circular(12.0),
                     child: Hero(
                       tag: 'salon_image',
-                      child: Image.asset(
-                        'assets/images/map1.jpg',
-                        height: screenHeight * 0.25, // Responsive height
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
+                      child: ElevatedButton(onPressed: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const live_location(),),);
+                      }, child:Image.asset(
+                          'assets/images/map1.jpg',
+                          height: screenHeight * 0.25, // Responsive height
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ), ),
+                      // child: Image.asset(
+                      //   'assets/images/map1.jpg',
+                      //   height: screenHeight * 0.25, // Responsive height
+                      //   width: double.infinity,
+                      //   fit: BoxFit.cover,
+                      // ),
                     ),
                   ),
                   const SizedBox(height: 16),

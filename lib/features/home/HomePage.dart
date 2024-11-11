@@ -19,6 +19,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
+    /// in the bottom navigation bar.
     _pages = [
       const SearchBarberPage(),
       const AppointmentSummaryPage(),
