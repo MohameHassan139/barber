@@ -97,7 +97,6 @@ class RegisterCubit extends Cubit<RegisterState> {
     }
   }
 
-  @override
   void dispose() {
     nameTextController.dispose();
     emailTextController.dispose();
